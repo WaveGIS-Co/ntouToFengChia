@@ -1,0 +1,38 @@
+spring:
+  kafka:
+    bootstrap-servers: PLAINTEXT://192.168.1.23:9092
+    #bootstrap-servers: PLAINTEXT://10.3.0.14:9092
+    client-id: kafka_consumer_service_java
+    listener:
+     ack-mode: MANUAL
+    properties:
+      security:
+        protocol: SASL_PLAINTEXT
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: 'org.apache.kafka.common.security.scram.ScramLoginModule required username="kafkaadmin" password="kafkaadmin-pass";'
+      spring:
+        json:
+          trusted:
+            packages: 'com.wavegis.kafka_consumer_service.model.dto'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: kafka_consumer_service_java
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      
+server:
+  port: 8777
+
+wavegis:
+  iow-publisher-upload-service:
+    api-8210-base-url: 'http://52.148.83.71:8210/water/'
+    api-8899-base-url: 'http://52.148.83.71:8899/wragovcloud_ws/'
+    api-java-base-url: 'http://52.187.182.187/water_extra_api/'
+    api-187-postgres-api-url: 'http://52.187.182.187/api/postgres_api_service/'
+    api-187-iow-url: 'http://52.187.182.187/api/iow_publisher/'
+    api-187-ntou-url: 'http://52.187.182.187/api/ntou_publisher/'
