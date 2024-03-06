@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
+import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
 import com.wavegis.kafka_consumer_service.util.Util;
 
 @Service
@@ -21,20 +23,42 @@ public class DataDistributionService {
     
     @Autowired
     private IowPublisherApiService iowPublisherApiService;
+    
+    @Autowired
+    private NtouPublisherApiService ntouPublisherApiService;
 
     private Map<String,List<IowSensorListDTO>>iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
+    private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
+    
     public void distribution(String st_no, String kafkaMessage) {
         
+        List<IowPublisherPostVO> iowPublisherPostVoList;
+        List<NtouPublisherPostVO> ntouPublisherPostVoList;
+        KafkaDTO dto;
+        String[] strs;
+        
         if(iowSensorDtoMap.containsKey(st_no)) {
-            KafkaDTO dto = new KafkaDTO();
-            String[] strs = kafkaMessage.split(",");
+            dto = new KafkaDTO();
+            strs = kafkaMessage.split(",");
             dto.setStrs(strs);
             
-            List<IowPublisherPostVO> iowPublisherPostVoList = new ArrayList<IowPublisherPostVO>();
+            iowPublisherPostVoList = new ArrayList<IowPublisherPostVO>();
             iowPublisherPostVoList.add(Util.toVo(dto, new IowPublisherPostVO()));
             int resCode = iowPublisherApiService.postData(st_no, iowPublisherPostVoList);
-            logger.info("resCode={},st_no={},datatime={}",resCode,st_no,dto.getDatatime());
+            logger.info("Iow---resCode={}, st_no={}, water_inner={}, datatime={}",resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+        }
+        
+        if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
+            dto = new KafkaDTO();
+            strs = kafkaMessage.split(",");
+            dto.setStrs(strs);
+            
+            ntouPublisherPostVoList = new ArrayList<NtouPublisherPostVO>();
+            ntouPublisherPostVoList.add(Util.toVo(dto, new NtouPublisherPostVO()));
+//            int resCode = ntouPublisherApiService.postData(st_no, ntouPublisherPostVoList);
+            int resCode = 999;
+            logger.info("Ntou---resCode={}, st_no={}, water_inner={}, datatime={}",resCode, st_no, dto.getWater_inner(), dto.getDatatime());
         }
     }
 }

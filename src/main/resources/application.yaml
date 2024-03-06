@@ -2,7 +2,7 @@ spring:
   kafka:
     bootstrap-servers: PLAINTEXT://192.168.1.23:9092
     #bootstrap-servers: PLAINTEXT://10.3.0.14:9092
-    client-id: kafka_consumer_service_java
+    client-id: kafka_consumer_service_java_187
     listener:
      ack-mode: MANUAL
     properties:
@@ -20,7 +20,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: kafka_consumer_service_java
+      group-id: kafka_consumer_service_java_187
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: false

@@ -1,6 +1,6 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
-public class NtouPublisherVO {
+public class NtouPublisherPostVO {
     
     private String device_type;
     
@@ -8,11 +8,7 @@ public class NtouPublisherVO {
     
     private String sendtime;
     
-    private double water_inner;
-    
     private double water_inner_bed;
-    
-    private double rain;
 
     public String getDevice_type() {
         return device_type;
@@ -38,14 +34,6 @@ public class NtouPublisherVO {
         this.sendtime = sendtime;
     }
 
-    public double getWater_inner() {
-        return water_inner;
-    }
-
-    public void setWater_inner(double water_inner) {
-        this.water_inner = water_inner;
-    }
-
     public double getWater_inner_bed() {
         return water_inner_bed;
     }
@@ -53,14 +41,4 @@ public class NtouPublisherVO {
     public void setWater_inner_bed(double water_inner_bed) {
         this.water_inner_bed = water_inner_bed;
     }
-
-    public double getRain() {
-        return rain;
-    }
-
-    public void setRain(double rain) {
-        this.rain = rain;
-    }
-
- 
 }

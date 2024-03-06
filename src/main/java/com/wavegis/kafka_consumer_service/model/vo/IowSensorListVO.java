@@ -116,7 +116,7 @@ public class IowSensorListVO {
         this.last_data = last_data;
     }
 
-    public IowSensorListDTO convertToDto() {
+    public IowSensorListDTO convertDto() {
         IowSensorListDTO dto = Util.toVo(this, new IowSensorListDTO());
         return dto;
     }

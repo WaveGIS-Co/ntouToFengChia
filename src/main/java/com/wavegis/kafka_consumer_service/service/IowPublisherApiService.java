@@ -36,7 +36,7 @@ public class IowPublisherApiService {
     private List<IowSensorListDTO> getDataIowSensorList(String org_id, String st_no, String device_type, String sensor_type, String iow_uuid) {
         Call<List<IowSensorListVO>> call = iowPublisherApiService.getDataIowSensorList(org_id, st_no, device_type, sensor_type, iow_uuid);
         List<IowSensorListDTO> dtoList = Util.callListApi(call, "getDataIowSensorList").stream()
-                .map(vo -> vo.convertToDto())
+                .map(vo -> vo.convertDto())
                 .collect(Collectors.toList());
         return dtoList ;
     }
