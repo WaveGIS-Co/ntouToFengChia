@@ -31,12 +31,13 @@ public class DataDistributionService {
     
     private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
     
-    public void distribution(String st_no, String kafkaMessage) {
+    public void distribution(String topices, String st_no, String kafkaMessage) {
         
         List<IowPublisherPostVO> iowPublisherPostVoList;
         List<NtouPublisherPostVO> ntouPublisherPostVoList;
         KafkaDTO dto;
         String[] strs;
+        int resCode = 202;
         
         if(iowSensorDtoMap.containsKey(st_no)) {
             dto = new KafkaDTO();
@@ -45,8 +46,8 @@ public class DataDistributionService {
             
             iowPublisherPostVoList = new ArrayList<IowPublisherPostVO>();
             iowPublisherPostVoList.add(Util.toVo(dto, new IowPublisherPostVO()));
-            int resCode = iowPublisherApiService.postData(st_no, iowPublisherPostVoList);
-            logger.info("Iow---resCode={}, st_no={}, water_inner={}, datatime={}",resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+            resCode = iowPublisherApiService.postData(st_no, iowPublisherPostVoList);
+            logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
         }
         
         if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
@@ -56,9 +57,8 @@ public class DataDistributionService {
             
             ntouPublisherPostVoList = new ArrayList<NtouPublisherPostVO>();
             ntouPublisherPostVoList.add(Util.toVo(dto, new NtouPublisherPostVO()));
-//            int resCode = ntouPublisherApiService.postData(st_no, ntouPublisherPostVoList);
-            int resCode = 999;
-            logger.info("Ntou---resCode={}, st_no={}, water_inner={}, datatime={}",resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+            resCode = ntouPublisherApiService.postData(st_no, ntouPublisherPostVoList);
+            logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
         }
     }
 }
