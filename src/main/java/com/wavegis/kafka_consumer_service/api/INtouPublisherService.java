@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 
 public interface INtouPublisherService {
     
-    @POST(value = "data/postData")
+    @POST(value = "data/uploadData")
     Call<Void> postData(
             @Query("st_no") String st_no,
             @Body List<NtouPublisherPostVO> voList);
