@@ -20,6 +20,8 @@ public class ServiceConfig {
 	private String api187IowUrl;
 	
 	private String api187NtouUrl;
+
+	private String api187TpesewerUrl;
 	
 	private String scheduleTime;
 
@@ -85,6 +87,14 @@ public class ServiceConfig {
 
     public void setApi187PostgresApiUrl(String api187PostgresApiUrl) {
         this.api187PostgresApiUrl = api187PostgresApiUrl;
+    }
+
+    public String getApi187TpesewerUrl() {
+        return api187TpesewerUrl;
+    }
+
+    public void setApi187TpesewerUrl(String api187TpesewerUrl) {
+        this.api187TpesewerUrl = api187TpesewerUrl;
     }
  
 }
