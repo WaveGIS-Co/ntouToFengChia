@@ -36,3 +36,5 @@ wavegis:
     api-187-postgres-api-url: 'http://52.187.182.187/api/postgres_api_service/'
     api-187-iow-url: 'http://52.187.182.187/api/iow_publisher/'
     api-187-ntou-url: 'http://52.187.182.187/api/ntou_publisher/'
+    api-187-tpesewer-url: 'http://52.187.182.187/api/tpesewer/'
+
