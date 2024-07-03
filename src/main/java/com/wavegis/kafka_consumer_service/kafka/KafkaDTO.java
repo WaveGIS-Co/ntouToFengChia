@@ -1,45 +1,59 @@
 package com.wavegis.kafka_consumer_service.kafka;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class KafkaDTO {
     
     private String[] strs;
     
-    private String st_no;
+    @JsonProperty("st_no")
+    private String stNo;
     
-    private String org_id;
+    @JsonProperty("org_id")
+    private String orgId;
     
-    private String device_type;
+    @JsonProperty("device_type")
+    private String deviceType;
     
+    @JsonProperty("datatime")
     private String datatime;
     
+    @JsonProperty("sendtime")
     private String sendtime;
     
+    @JsonProperty("battery")
     private double battery;
     
+    @JsonProperty("rssi")
     private String rssi;
     
+    @JsonProperty("speed")
     private String speed;
     
-    private double water_inner;
+    @JsonProperty("water_inner")
+    private double waterInner;
     
-    private double water_inner_bed;
+    @JsonProperty("water_inner_bed")
+    private double waterInnerBed;
     
+    @JsonProperty("version")
     private String version;
     
+    @JsonProperty("rain")
     private double rain;
     
     private void converDto() {
         
-        this.st_no = strs[0].replace("\"", "");
-        this.org_id = strs[1];
-        this.device_type = strs[2];
+        this.stNo = strs[0].replace("\"", "");
+        this.orgId = strs[1];
+        this.deviceType = strs[2];
         this.datatime = strs[3];
         this.sendtime = strs[4];
         this.battery = Double.valueOf(strs[5]);
         this.rssi = strs[6];
         this.speed = strs[7];
-        this.water_inner = Double.valueOf(strs[8]);
-        this.water_inner_bed = Double.valueOf(strs[9]);
+        this.waterInner = Double.valueOf(strs[8]);
+        this.waterInnerBed = Double.valueOf(strs[9]);
         this.version = strs[10].replace("\"", "");
         this.rain = Double.valueOf(strs[11]);
     }
@@ -53,28 +67,28 @@ public class KafkaDTO {
         this.converDto();
     }
 
-    public String getSt_no() {
-        return st_no;
+    public String getStNo() {
+        return stNo;
     }
 
-    public void setSt_no(String st_no) {
-        this.st_no = st_no;
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
     }
 
-    public String getOrg_id() {
-        return org_id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setOrg_id(String org_id) {
-        this.org_id = org_id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public String getDevice_type() {
-        return device_type;
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
     public String getDatatime() {
@@ -117,20 +131,20 @@ public class KafkaDTO {
         this.speed = speed;
     }
 
-    public double getWater_inner() {
-        return water_inner;
+    public double getWaterInner() {
+        return waterInner;
     }
 
-    public void setWater_inner(double water_inner) {
-        this.water_inner = water_inner;
+    public void setWaterInner(double waterInner) {
+        this.waterInner = waterInner;
     }
 
-    public double getWater_inner_bed() {
-        return water_inner_bed;
+    public double getWaterInnerBed() {
+        return waterInnerBed;
     }
 
-    public void setWater_inner_bed(double water_inner_bed) {
-        this.water_inner_bed = water_inner_bed;
+    public void setWaterInnerBed(double waterInnerBed) {
+        this.waterInnerBed = waterInnerBed;
     }
 
     public String getVersion() {
@@ -148,4 +162,5 @@ public class KafkaDTO {
     public void setRain(double rain) {
         this.rain = rain;
     }
+
 }

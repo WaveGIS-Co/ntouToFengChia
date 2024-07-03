@@ -25,11 +25,11 @@ public class KaohsiungWrbPublisherPostVO {
 
     public KaohsiungWrbPublisherPostVO fromKafkaDTO(KafkaDTO vo) {
         KaohsiungWrbPublisherPostVO model = this;
-        model.setStNo(vo.getSt_no());
+        model.setStNo(vo.getStNo());
         model.setDatatime(vo.getDatatime());
         model.setBatteryvol(vo.getBattery());
         model.setRssi(Double.valueOf(vo.getRssi()));
-        model.setWaterInner(vo.getWater_inner());
+        model.setWaterInner(vo.getWaterInner());
         model.setVersion(vo.getVersion());
         return this;
     }

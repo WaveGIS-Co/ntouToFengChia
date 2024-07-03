@@ -42,16 +42,16 @@ public class TpeSewerPublisherPostVO {
 
     public TpeSewerPublisherPostVO fromKafkaDTO(KafkaDTO vo) {
         TpeSewerPublisherPostVO model = this;
-        model.setStNo(vo.getSt_no());
-        model.setOrgId(vo.getOrg_id());
-        model.setDeviceType(vo.getDevice_type());
+        model.setStNo(vo.getStNo());
+        model.setOrgId(vo.getOrgId());
+        model.setDeviceType(vo.getDeviceType());
         model.setDatatime(vo.getDatatime());
         model.setSendtime(vo.getSendtime());
         model.setBattery(vo.getBattery());
         model.setRssi(Double.valueOf(vo.getRssi()));
         model.setSpeed(vo.getSpeed());
-        model.setWaterInner(vo.getWater_inner());
-        model.setWaterInner(vo.getWater_inner_bed());
+        model.setWaterInner(vo.getWaterInner());
+        model.setWaterInner(vo.getWaterInnerBed());
         model.setVersion(vo.getVersion());
         model.setRain(vo.getRain());
         return this;

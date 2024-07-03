@@ -63,7 +63,7 @@ public class IowPublisherApiService {
         String stNo;
         for(IowSensorListDTO iowSensorDto : iowSensorDtoList) {
             
-            stNo = iowSensorDto.getSt_no();
+            stNo = iowSensorDto.getStNo();
             if(init) {
                 if(!iowSensorDtoMap.containsKey(stNo)) {
                     listTemp = new ArrayList<IowSensorListDTO>();

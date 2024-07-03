@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.wavegis.kafka_consumer_service.service.IowPublisherApiService;
 import com.wavegis.kafka_consumer_service.service.NtouPublisherApiService;
 import com.wavegis.kafka_consumer_service.service.SchedulerPoolTaskService;
-import com.wavegis.kafka_consumer_service.service.TpeSewerService;
 
 @Component
 public class kafkaConsumerServiceApp implements ApplicationRunner{

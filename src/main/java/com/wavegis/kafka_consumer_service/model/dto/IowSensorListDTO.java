@@ -8,31 +8,31 @@ public class IowSensorListDTO {
     private int id;
     
     @SerializedName("org_id")
-    private String org_id;
+    private String orgId;
     
     @SerializedName("iow_accounts_org_id")
-    private String iow_accounts_org_id;
+    private String iowAccountsOrgId;
     
     @SerializedName("st_no")
-    private String st_no;
+    private String stNo;
     
     @SerializedName("device_type")
-    private String device_type;
+    private String deviceType;
     
     @SerializedName("sensor_type")
-    private String sensor_type;
+    private String sensorType;
     
     @SerializedName("iow_uuid")
-    private String iow_uuid;
+    private String iowUuid;
     
     @SerializedName("description")
     private String description;
     
     @SerializedName("last_time")
-    private String last_time;
+    private String lastTime;
     
     @SerializedName("last_data")
-    private String last_data;
+    private String lastData;
 
     public int getId() {
         return id;
@@ -42,52 +42,52 @@ public class IowSensorListDTO {
         this.id = id;
     }
 
-    public String getOrg_id() {
-        return org_id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setOrg_id(String org_id) {
-        this.org_id = org_id;
-    }
-    
-    public String getIow_accounts_org_id() {
-        return iow_accounts_org_id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public void setIow_accounts_org_id(String iow_accounts_org_id) {
-        this.iow_accounts_org_id = iow_accounts_org_id;
+    public String getIowAccountsOrgId() {
+        return iowAccountsOrgId;
     }
 
-    public String getSt_no() {
-        return st_no;
+    public void setIowAccountsOrgId(String iowAccountsOrgId) {
+        this.iowAccountsOrgId = iowAccountsOrgId;
     }
 
-    public void setSt_no(String st_no) {
-        this.st_no = st_no;
+    public String getStNo() {
+        return stNo;
     }
 
-    public String getDevice_type() {
-        return device_type;
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
     }
 
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public String getSensor_type() {
-        return sensor_type;
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
-    public void setSensor_type(String sensor_type) {
-        this.sensor_type = sensor_type;
+    public String getSensorType() {
+        return sensorType;
     }
 
-    public String getIow_uuid() {
-        return iow_uuid;
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
     }
 
-    public void setIow_uuid(String iow_uuid) {
-        this.iow_uuid = iow_uuid;
+    public String getIowUuid() {
+        return iowUuid;
+    }
+
+    public void setIowUuid(String iowUuid) {
+        this.iowUuid = iowUuid;
     }
 
     public String getDescription() {
@@ -98,20 +98,19 @@ public class IowSensorListDTO {
         this.description = description;
     }
 
-    public String getLast_time() {
-        return last_time;
+    public String getLastTime() {
+        return lastTime;
     }
 
-    public void setLast_time(String last_time) {
-        this.last_time = last_time;
+    public void setLastTime(String lastTime) {
+        this.lastTime = lastTime;
     }
 
-    public String getLast_data() {
-        return last_data;
+    public String getLastData() {
+        return lastData;
     }
 
-    public void setLast_data(String last_data) {
-        this.last_data = last_data;
+    public void setLastData(String lastData) {
+        this.lastData = lastData;
     }
-
 }

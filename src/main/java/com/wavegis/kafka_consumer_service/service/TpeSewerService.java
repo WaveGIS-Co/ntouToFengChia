@@ -23,6 +23,6 @@ public class TpeSewerService {
 	public Boolean hasStnosByKafkaString(String kafkaMessage) {
         KafkaDTO dto = new KafkaDTO();
         dto.setStrs(kafkaMessage.split(","));
-        return dto.getDevice_type().equals("WG_R_W") && dto.getOrg_id().equals("68");
+        return dto.getDeviceType().equals("WG_R_W") && dto.getOrgId().equals("68");
 	}
 }
