@@ -8,10 +8,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
-
 import javax.annotation.PostConstruct;
 
-import org.eclipse.jetty.server.RequestLog.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.TpeSewerPublisherPostVO;
 import com.wavegis.kafka_consumer_service.util.Util;
@@ -38,18 +37,18 @@ public class DataDistributionService {
     
     @Autowired
     private TpeSewerService tpeSewerService;
+    
+    @Autowired
+    private KaohsiungWrbService kaohsiungWrbService;
 
     private Map<String,List<IowSensorListDTO>>iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
     private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
     
-    private Function<String, Boolean> isTpeswerHasStnos = st_no->tpeSewerService.isTpeswerHasStnos(st_no);
-    
     private Function<String, KafkaDTO> prepareDto;
     
     @PostConstruct
     private void init() {
-        
         // 將資料處理和 API 呼叫抽成方法，減少重複碼
         prepareDto = (kafkaMessage) -> {
             KafkaDTO dto = new KafkaDTO();
@@ -61,7 +60,7 @@ public class DataDistributionService {
     
     public void distribution(String topices, String st_no, String kafka_message) {
 
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(4);
         
         CompletableFuture<Void> futureIow = CompletableFuture.runAsync(() -> {
             if(iowSensorDtoMap.containsKey(st_no)) {
@@ -72,7 +71,7 @@ public class DataDistributionService {
                 logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
             }
         },executor);
-        
+
         CompletableFuture<Void> futureNtou = CompletableFuture.runAsync(() -> {
             if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
@@ -84,15 +83,23 @@ public class DataDistributionService {
         },executor);
         
         CompletableFuture<Void> futureTpesewer = CompletableFuture.runAsync(() -> {
-            if(isTpeswerHasStnos.apply(st_no)) {
+            if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
                 logger.info("Tpesewer---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
             }
         },executor);
         
+        CompletableFuture<Void> futureKaohsiungWrb = CompletableFuture.runAsync(() -> {
+            if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
+                logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+            }
+        },executor);
+        
 
-        CompletableFuture.allOf(futureIow, futureNtou, futureTpesewer)
+        CompletableFuture.allOf(futureIow, futureNtou, futureTpesewer, futureKaohsiungWrb)
         .thenRun(() -> logger.info("All conditions completed."))
         .join();
 

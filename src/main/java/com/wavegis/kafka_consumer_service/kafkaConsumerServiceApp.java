@@ -22,16 +22,11 @@ public class kafkaConsumerServiceApp implements ApplicationRunner{
     @Autowired
     private NtouPublisherApiService ntouPublisherApiService;
     
-    @Autowired
-    private TpeSewerService tpeSewerService;
-    
     private void init() {
         //初始化Iow關聯表
         iowPublisherApiService.initIowSensorDtoMap(true);
         //初始化Ntou關聯表
         ntouPublisherApiService.initNtouSensorDtoMap(true);
-        //初始化Tpesewer關聯表
-        tpeSewerService.initTpesewerStnoSet(true);
     }
 
     @Override
@@ -42,7 +37,6 @@ public class kafkaConsumerServiceApp implements ApplicationRunner{
         Runnable reGetSensorListData = () ->{
             iowPublisherApiService.initIowSensorDtoMap(false);
             ntouPublisherApiService.initNtouSensorDtoMap(false);
-            tpeSewerService.initTpesewerStnoSet(false);
         };
         schedulerPoolTaskService.addTaskToScheduler(reGetSensorListData, "0 0 * * * *", "ReSensorList");
     }

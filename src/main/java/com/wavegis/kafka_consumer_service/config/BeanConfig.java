@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-import com.wavegis.kafka_consumer_service.api.IFlood8210Service;
 import com.wavegis.kafka_consumer_service.api.IIowPublisherService;
+import com.wavegis.kafka_consumer_service.api.IKaohsiungWrbService;
 import com.wavegis.kafka_consumer_service.api.INtouPublisherService;
 import com.wavegis.kafka_consumer_service.api.IPostgresApiService;
 import com.wavegis.kafka_consumer_service.api.ITpeSewerPublisherService;
@@ -35,13 +35,13 @@ public class BeanConfig {
     }
     
     @Bean
-    public IFlood8210Service iFlood8210Service() {
-        return RetrofitFactory.createService(IFlood8210Service.class, serviceConfig.getApi8210BaseUrl()); 
+    public ITpeSewerPublisherService iTpeSewerPublisherService() {
+        return RetrofitFactory.createService(ITpeSewerPublisherService.class, serviceConfig.getApi187TpesewerUrl()); 
     }
 
     @Bean
-    public ITpeSewerPublisherService iTpeSewerPublisherService() {
-        return RetrofitFactory.createService(ITpeSewerPublisherService.class, serviceConfig.getApi187TpesewerUrl()); 
+    public IKaohsiungWrbService iKaohsiungWrbService() {
+        return RetrofitFactory.createService(IKaohsiungWrbService.class, serviceConfig.getApiKaohsiungWrbUrl()); 
     }
 	
 	@Bean
