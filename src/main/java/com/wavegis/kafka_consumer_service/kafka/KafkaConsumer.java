@@ -20,7 +20,7 @@ public class KafkaConsumer {
     private void filterDatas(String org_id, String st_no) {
         
         if(org_id == null || "test".equals(org_id)) {
-            logger.error("org_id={} is test",org_id);
+            logger.error("org_id={} is null or test",org_id);
             return ;
         }
         

@@ -1,6 +1,7 @@
 package com.wavegis.kafka_consumer_service.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -72,9 +73,7 @@ public class DataDistributionService {
         CompletableFuture<Void> futureIow = CompletableFuture.runAsync(() -> {
             if(iowSensorDtoMap.containsKey(st_no)) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
-                List<IowPublisherPostVO> iowPublisherPostVoList = new ArrayList<IowPublisherPostVO>();
-                iowPublisherPostVoList.add(Util.toVo(dto, new IowPublisherPostVO()));
-                int resCode = iowPublisherApiService.postData(st_no, iowPublisherPostVoList);
+                int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
                 logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
                         topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
             }
@@ -83,9 +82,7 @@ public class DataDistributionService {
         CompletableFuture<Void> futureNtou = CompletableFuture.runAsync(() -> {
             if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
-                List<NtouPublisherPostVO> ntouPublisherPostVoList = new ArrayList<NtouPublisherPostVO>();
-                ntouPublisherPostVoList.add(Util.toVo(dto, new NtouPublisherPostVO()));
-                int resCode = ntouPublisherApiService.postData(st_no, ntouPublisherPostVoList);
+                int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
                 logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
                         topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
             }
@@ -124,4 +121,5 @@ public class DataDistributionService {
                     ex.getMessage());
         }
     }
+
 }
