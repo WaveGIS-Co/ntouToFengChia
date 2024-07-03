@@ -37,4 +37,5 @@ wavegis:
     api-187-iow-url: 'http://52.187.182.187/api/iow_publisher/'
     api-187-ntou-url: 'http://52.187.182.187/api/ntou_publisher/'
     api-187-tpesewer-url: 'http://52.187.182.187/api/tpesewer/'
+    api-kaohsiung-wrb-url: 'http://52.187.182.187/api/kaohsiungWrb/'
 
