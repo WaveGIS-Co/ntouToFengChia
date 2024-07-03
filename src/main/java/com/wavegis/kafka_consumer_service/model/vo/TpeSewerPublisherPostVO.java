@@ -1,71 +1,84 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 
 public class TpeSewerPublisherPostVO {
-    private String st_no;
+    @JsonProperty("st_no")
+    private String stNo;
     
-    private String org_id;
+    @JsonProperty("org_id")
+    private String orgId;
     
-    private String device_type;
+    @JsonProperty("device_type")
+    private String deviceType;
     
+    @JsonProperty("datatime")
     private String datatime;
     
+    @JsonProperty("sendtime")
     private String sendtime;
     
+    @JsonProperty("battery")
     private double battery;
     
+    @JsonProperty("rssi")
     private double rssi;
     
+    @JsonProperty("speed")
     private String speed;
     
-    private double water_inner;
+    @JsonProperty("water_inner")
+    private double waterInner;
     
-    private double water_inner_bed;
+    @JsonProperty("water_inner_bed")
+    private double waterInnerBed;
     
+    @JsonProperty("version")
     private String version;
     
+    @JsonProperty("rain")
     private double rain;
 
     public TpeSewerPublisherPostVO fromKafkaDTO(KafkaDTO vo) {
         TpeSewerPublisherPostVO model = this;
-        model.setSt_no(vo.getSt_no());
-        model.setOrg_id(vo.getOrg_id());
-        model.setDevice_type(vo.getDevice_type());
+        model.setStNo(vo.getSt_no());
+        model.setOrgId(vo.getOrg_id());
+        model.setDeviceType(vo.getDevice_type());
         model.setDatatime(vo.getDatatime());
         model.setSendtime(vo.getSendtime());
         model.setBattery(vo.getBattery());
         model.setRssi(Double.valueOf(vo.getRssi()));
         model.setSpeed(vo.getSpeed());
-        model.setWater_inner(vo.getWater_inner());
-        model.setWater_inner_bed(vo.getWater_inner_bed());
+        model.setWaterInner(vo.getWater_inner());
+        model.setWaterInner(vo.getWater_inner_bed());
         model.setVersion(vo.getVersion());
         model.setRain(vo.getRain());
         return this;
-    } 
-
-    public String getSt_no() {
-        return st_no;
     }
 
-    public void setSt_no(String st_no) {
-        this.st_no = st_no;
+    public String getStNo() {
+        return stNo;
     }
 
-    public String getOrg_id() {
-        return org_id;
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
     }
 
-    public void setOrg_id(String org_id) {
-        this.org_id = org_id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public String getDevice_type() {
-        return device_type;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
     public String getDatatime() {
@@ -108,20 +121,20 @@ public class TpeSewerPublisherPostVO {
         this.speed = speed;
     }
 
-    public double getWater_inner() {
-        return water_inner;
+    public double getWaterInner() {
+        return waterInner;
     }
 
-    public void setWater_inner(double water_inner) {
-        this.water_inner = water_inner;
+    public void setWaterInner(double waterInner) {
+        this.waterInner = waterInner;
     }
 
-    public double getWater_inner_bed() {
-        return water_inner_bed;
+    public double getWaterInnerBed() {
+        return waterInnerBed;
     }
 
-    public void setWater_inner_bed(double water_inner_bed) {
-        this.water_inner_bed = water_inner_bed;
+    public void setWaterInnerBed(double waterInnerBed) {
+        this.waterInnerBed = waterInnerBed;
     }
 
     public String getVersion() {
@@ -138,5 +151,6 @@ public class TpeSewerPublisherPostVO {
 
     public void setRain(double rain) {
         this.rain = rain;
-    }
+    } 
+
 }
