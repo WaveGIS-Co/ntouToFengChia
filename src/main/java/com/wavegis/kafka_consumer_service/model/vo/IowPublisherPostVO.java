@@ -1,46 +1,54 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wavegis.kafka_consumer_service.model.dto.IowPublisherDTO;
 import com.wavegis.kafka_consumer_service.util.Util;
 
 public class IowPublisherPostVO {
 
-    private String org_id;
+    @JsonProperty("org_id")
+    private String orgId;
     
-    private String device_type;
+    @JsonProperty("device_type")
+    private String deviceType;
     
-    private String st_no;
+    @JsonProperty("st_no")
+    private String stNo;
     
+    @JsonProperty("datatime")
     private String datatime;
     
+    @JsonProperty("sendtime")
     private String sendtime;
     
-    private double water_inner;
+    @JsonProperty("water_inner")
+    private double waterInner;
     
+    @JsonProperty("rain")
     private double rain;
 
-    public String getOrg_id() {
-        return org_id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setOrg_id(String org_id) {
-        this.org_id = org_id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public String getDevice_type() {
-        return device_type;
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
-    public String getSt_no() {
-        return st_no;
+    public String getStNo() {
+        return stNo;
     }
 
-    public void setSt_no(String st_no) {
-        this.st_no = st_no;
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
     }
 
     public String getDatatime() {
@@ -59,12 +67,12 @@ public class IowPublisherPostVO {
         this.sendtime = sendtime;
     }
 
-    public double getWater_inner() {
-        return water_inner;
+    public double getWaterInner() {
+        return waterInner;
     }
 
-    public void setWater_inner(double water_inner) {
-        this.water_inner = water_inner;
+    public void setWaterInner(double waterInner) {
+        this.waterInner = waterInner;
     }
 
     public double getRain() {
@@ -74,7 +82,7 @@ public class IowPublisherPostVO {
     public void setRain(double rain) {
         this.rain = rain;
     }
-
+    
     public IowPublisherDTO convertDto() {
         IowPublisherDTO dto = Util.toVo(this, new IowPublisherDTO());
         return dto;
@@ -82,8 +90,7 @@ public class IowPublisherPostVO {
 
     @Override
     public String toString() {
-        return "IowPublisherPostVO [org_id=" + org_id + ", device_type=" + device_type + ", st_no=" + st_no
-                + ", datatime=" + datatime + ", sendtime=" + sendtime + ", water_inner=" + water_inner + ", rain="
-                + rain + "]";
+        return "IowPublisherPostVO [orgId=" + orgId + ", deviceType=" + deviceType + ", stNo=" + stNo + ", datatime="
+                + datatime + ", sendtime=" + sendtime + ", waterInner=" + waterInner + ", rain=" + rain + "]";
     }
 }

@@ -22,6 +22,6 @@ public class KaohsiungWrbService {
 	public Boolean hasStnosByKafkaString(String kafkaMessage) {
         KafkaDTO dto = new KafkaDTO();
         dto.setStrs(kafkaMessage.split(","));
-        return dto.getDevice_type().equals("WG_R_W") && dto.getOrg_id().equals("112") && dto.getVersion().equals("WG-001");
+        return dto.getDeviceType().equals("WG_R_W") && dto.getOrgId().equals("112") && dto.getVersion().equals("WG-001");
 	}
 }

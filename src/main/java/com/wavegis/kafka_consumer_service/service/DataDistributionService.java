@@ -1,9 +1,18 @@
 package com.wavegis.kafka_consumer_service.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,56 +45,81 @@ public class DataDistributionService {
     @Autowired
     private KaohsiungWrbService kaohsiungWrbService;
 
-    private Map<String,List<IowSensorListDTO>>iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
+    private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
     private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
     
-    public void distribution(String topices, String st_no, String kafkaMessage) {
+    private Function<String, KafkaDTO> prepareDto;
+    
+    private ExecutorService executor;
+    
+    @PostConstruct
+    private void init() {
         
-        List<IowPublisherPostVO> iowPublisherPostVoList;
-        List<NtouPublisherPostVO> ntouPublisherPostVoList;
-        KafkaDTO dto;
-        String[] strs;
-        int resCode = 202;
+        // 初始化連接池數量
+        executor = Executors.newFixedThreadPool(4);
         
-        if(iowSensorDtoMap.containsKey(st_no)) {
-            dto = new KafkaDTO();
-            strs = kafkaMessage.split(",");
+        // 將資料處理和 API 呼叫抽成方法，減少重複碼
+        prepareDto = (kafkaMessage) -> {
+            KafkaDTO dto = new KafkaDTO();
+            String[] strs = kafkaMessage.split(",");
             dto.setStrs(strs);
-            
-            iowPublisherPostVoList = new ArrayList<IowPublisherPostVO>();
-            iowPublisherPostVoList.add(Util.toVo(dto, new IowPublisherPostVO()));
-            resCode = iowPublisherApiService.postData(st_no, iowPublisherPostVoList);
-            logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
-        }
+            return dto;
+        };
+    }
+    
+    public void distribution(String topices, String st_no, String kafka_message) {
+
+        CompletableFuture<Void> futureIow = CompletableFuture.runAsync(() -> {
+            if(iowSensorDtoMap.containsKey(st_no)) {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
+                logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
+                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+            }
+        },executor);
+
+        CompletableFuture<Void> futureNtou = CompletableFuture.runAsync(() -> {
+            if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+                logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
+                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+            }
+        },executor);
         
-        if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
-            dto = new KafkaDTO();
-            strs = kafkaMessage.split(",");
-            dto.setStrs(strs);
-            
-            ntouPublisherPostVoList = new ArrayList<NtouPublisherPostVO>();
-            ntouPublisherPostVoList.add(Util.toVo(dto, new NtouPublisherPostVO()));
-            resCode = ntouPublisherApiService.postData(st_no, ntouPublisherPostVoList);
-            logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
-        }
+        CompletableFuture<Void> futureTpesewer = CompletableFuture.runAsync(() -> {
+            if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
+                logger.info("Tpesewer---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
+                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+            }
+        },executor);
         
-        if(tpeSewerService.hasStnosByKafkaString(kafkaMessage)) {
-            dto = new KafkaDTO();
-            strs = kafkaMessage.split(",");
-            dto.setStrs(strs);
-            
-            resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
-            logger.info("Tpesewer---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
-        }
+        CompletableFuture<Void> futureKaohsiungWrb = CompletableFuture.runAsync(() -> {
+            if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
+                logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
+                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+            }
+        },executor);
         
-        if(kaohsiungWrbService.hasStnosByKafkaString(kafkaMessage)) {
-            dto = new KafkaDTO();
-            strs = kafkaMessage.split(",");
-            dto.setStrs(strs);
-            
-            resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
-            logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureIow, futureNtou, futureTpesewer, futureKaohsiungWrb);
+        allFutures.join();
+        allFutures.exceptionally(ex -> {
+            logger.error("Exception occurred while processing tasks asynchronously: {}",
+                    ex.getMessage());
+            return null;
+        });
+        
+        try {
+            allFutures.get(60, TimeUnit.SECONDS); // 設置最多等待 60 秒
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            logger.error("Timeout or exception occurred while waiting for tasks to complete: {}",
+                    ex.getMessage());
         }
     }
+
 }

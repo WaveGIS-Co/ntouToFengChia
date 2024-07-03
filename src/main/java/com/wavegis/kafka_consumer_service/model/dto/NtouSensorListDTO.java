@@ -8,19 +8,19 @@ public class NtouSensorListDTO {
     private int id;
     
     @SerializedName("org_id")
-    private String org_id;
+    private String orgId;
         
     @SerializedName("st_no")
-    private String st_no;
+    private String stNo;
     
     @SerializedName("device_type")
-    private String device_type;
+    private String deviceType;
     
     @SerializedName("stt_no")
-    private String stt_no;
+    private String sttNo;
     
     @SerializedName("dev_id")
-    private String dev_id;
+    private String devId;
 
     public int getId() {
         return id;
@@ -30,43 +30,44 @@ public class NtouSensorListDTO {
         this.id = id;
     }
 
-    public String getOrg_id() {
-        return org_id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setOrg_id(String org_id) {
-        this.org_id = org_id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public String getSt_no() {
-        return st_no;
+    public String getStNo() {
+        return stNo;
     }
 
-    public void setSt_no(String st_no) {
-        this.st_no = st_no;
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
     }
 
-    public String getDevice_type() {
-        return device_type;
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public void setDevice_type(String device_type) {
-        this.device_type = device_type;
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 
-    public String getStt_no() {
-        return stt_no;
+    public String getSttNo() {
+        return sttNo;
     }
 
-    public void setStt_no(String stt_no) {
-        this.stt_no = stt_no;
+    public void setSttNo(String sttNo) {
+        this.sttNo = sttNo;
     }
 
-    public String getDev_id() {
-        return dev_id;
+    public String getDevId() {
+        return devId;
     }
 
-    public void setDev_id(String dev_id) {
-        this.dev_id = dev_id;
+    public void setDevId(String devId) {
+        this.devId = devId;
     }
+
 }

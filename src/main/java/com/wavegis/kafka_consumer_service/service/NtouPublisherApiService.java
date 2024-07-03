@@ -63,7 +63,7 @@ public class NtouPublisherApiService {
         String devId;
         for(NtouSensorListDTO ntouSensorDto : ntouSensorDtoList) {
             
-            devId = ntouSensorDto.getSt_no().toLowerCase();
+            devId = ntouSensorDto.getStNo().toLowerCase();
             if(init) {
                 if(!ntouSensorDtoMap.containsKey(devId)) {
                     listTemp = new ArrayList<NtouSensorListDTO>();
