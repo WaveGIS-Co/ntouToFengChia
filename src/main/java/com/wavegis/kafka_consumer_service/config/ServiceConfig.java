@@ -22,6 +22,8 @@ public class ServiceConfig {
 	private String api187NtouUrl;
 
 	private String api187TpesewerUrl;
+
+    private String apiKaohsiungWrbUrl;
 	
 	private String scheduleTime;
 
@@ -95,6 +97,14 @@ public class ServiceConfig {
 
     public void setApi187TpesewerUrl(String api187TpesewerUrl) {
         this.api187TpesewerUrl = api187TpesewerUrl;
+    }
+
+    public String getApiKaohsiungWrbUrl() {
+        return apiKaohsiungWrbUrl;
+    }
+
+    public void setApiKaohsiungWrbUrl(String apiKaohsiungWrbUrl) {
+        this.apiKaohsiungWrbUrl = apiKaohsiungWrbUrl;
     }
  
 }

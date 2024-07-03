@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
-import org.eclipse.jetty.server.RequestLog.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.TpeSewerPublisherPostVO;
 import com.wavegis.kafka_consumer_service.util.Util;
@@ -33,12 +32,13 @@ public class DataDistributionService {
     
     @Autowired
     private TpeSewerService tpeSewerService;
+    
+    @Autowired
+    private KaohsiungWrbService kaohsiungWrbService;
 
     private Map<String,List<IowSensorListDTO>>iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
     private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
-    
-    private Function<String, Boolean> isTpeswerHasStnos = st_no->tpeSewerService.isTpeswerHasStnos(st_no);
     
     public void distribution(String topices, String st_no, String kafkaMessage) {
         
@@ -70,13 +70,22 @@ public class DataDistributionService {
             logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
         }
         
-        if(isTpeswerHasStnos.apply(st_no)) {
+        if(tpeSewerService.hasStnosByKafkaString(kafkaMessage)) {
             dto = new KafkaDTO();
             strs = kafkaMessage.split(",");
             dto.setStrs(strs);
             
             resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
             logger.info("Tpesewer---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
+        }
+        
+        if(kaohsiungWrbService.hasStnosByKafkaString(kafkaMessage)) {
+            dto = new KafkaDTO();
+            strs = kafkaMessage.split(",");
+            dto.setStrs(strs);
+            
+            resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
+            logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",topices, resCode, st_no, dto.getWater_inner(), dto.getDatatime());
         }
     }
 }
