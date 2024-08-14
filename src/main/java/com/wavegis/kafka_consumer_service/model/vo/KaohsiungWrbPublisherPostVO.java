@@ -20,6 +20,9 @@ public class KaohsiungWrbPublisherPostVO {
     @JsonProperty("water_inner")
     private Double waterInner;
 
+    @JsonProperty("water_inner_bed")
+    private Double waterInnerBed;
+
     @JsonProperty("version")
     private String version;
 
@@ -30,6 +33,7 @@ public class KaohsiungWrbPublisherPostVO {
         model.setBatteryvol(vo.getBattery());
         model.setRssi(Double.valueOf(vo.getRssi()));
         model.setWaterInner(vo.getWaterInner());
+        model.setWaterInnerBed(vo.getWaterInnerBed());
         model.setVersion(vo.getVersion());
         return this;
     }
@@ -80,6 +84,14 @@ public class KaohsiungWrbPublisherPostVO {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public Double getWaterInnerBed() {
+        return waterInnerBed;
+    }
+
+    public void setWaterInnerBed(Double waterInnerBed) {
+        this.waterInnerBed = waterInnerBed;
     }
 
 }

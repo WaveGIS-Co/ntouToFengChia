@@ -51,7 +51,7 @@ public class TpeSewerPublisherPostVO {
         model.setRssi(Double.valueOf(vo.getRssi()));
         model.setSpeed(vo.getSpeed());
         model.setWaterInner(vo.getWaterInner());
-        model.setWaterInner(vo.getWaterInnerBed());
+        model.setWaterInnerBed(vo.getWaterInnerBed());
         model.setVersion(vo.getVersion());
         model.setRain(vo.getRain());
         return this;
