@@ -74,7 +74,7 @@ public class DataDistributionService {
             if(iowSensorDtoMap.containsKey(st_no)) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
-                logger.info("Iow---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
+                logger.info("Iow---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                         topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
             }
         },executor);
@@ -83,8 +83,8 @@ public class DataDistributionService {
             if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
-                logger.info("Ntou---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
-                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+                logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
+                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
             }
         },executor);
         
@@ -92,8 +92,8 @@ public class DataDistributionService {
             if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
-                logger.info("Tpesewer---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
-                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+                logger.info("Tpesewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
             }
         },executor);
         
@@ -101,8 +101,8 @@ public class DataDistributionService {
             if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
-                logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, water_inner={}, datatime={}",
-                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+                logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
             }
         },executor);
         

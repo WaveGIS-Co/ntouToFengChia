@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NtouPublisherPostVO {
     
+    @JsonProperty("st_no")
+    private String stNo;
+    
     @JsonProperty("device_type")
     private String deviceType;
     
@@ -13,8 +16,22 @@ public class NtouPublisherPostVO {
     @JsonProperty("sendtime")
     private String sendtime;
     
+    @JsonProperty("water_inner")
+    private double waterInner;
+    
     @JsonProperty("water_inner_bed")
     private double waterInnerBed;
+    
+    @JsonProperty("rain")
+    private double rain;
+
+    public String getStNo() {
+        return stNo;
+    }
+
+    public void setStNo(String stNo) {
+        this.stNo = stNo;
+    }
 
     public String getDeviceType() {
         return deviceType;
@@ -40,12 +57,28 @@ public class NtouPublisherPostVO {
         this.sendtime = sendtime;
     }
 
+    public double getWaterInner() {
+        return waterInner;
+    }
+
+    public void setWaterInner(double waterInner) {
+        this.waterInner = waterInner;
+    }
+
     public double getWaterInnerBed() {
         return waterInnerBed;
     }
 
     public void setWaterInnerBed(double waterInnerBed) {
         this.waterInnerBed = waterInnerBed;
+    }
+
+    public double getRain() {
+        return rain;
+    }
+
+    public void setRain(double rain) {
+        this.rain = rain;
     }
 
 }
