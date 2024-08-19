@@ -66,17 +66,6 @@ public class KafkaConsumer {
         ack.acknowledge();
     }
     
-    @KafkaListener(id = "kafka_consumer_service_java-ntou-1", topics = "sensordata_post", groupId = "kafka_consumer_service_java-ntou")
-    public void listenOtherSensorNtou(String kafkaMessage, Acknowledgment ack) {
-
-        String stNo = kafkaMessage.split(",")[0];
-        String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata_post", PublisherEnum.ntou, stNo, kafkaMessage);
-
-        ack.acknowledge();
-    }
-
     // ----------------------------- tpeSewer upload -----------------------------------
     @KafkaListener(id = "kafka_consumer_service_java-tpeSewer-0", topics = "sensordata", groupId = "kafka_consumer_service_java-tpeSewer")
     public void listenWavegisSensorTpeSewer(String kafkaMessage, Acknowledgment ack) {
@@ -89,17 +78,6 @@ public class KafkaConsumer {
         ack.acknowledge();
     }
     
-    @KafkaListener(id = "kafka_consumer_service_java-tpeSewer-1", topics = "sensordata_post", groupId = "kafka_consumer_service_java-tpeSewer")
-    public void listenOtherSensorTpeSewer(String kafkaMessage, Acknowledgment ack) {
-
-        String stNo = kafkaMessage.split(",")[0];
-        String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata_post", PublisherEnum.tpeSewer, stNo, kafkaMessage);
-
-        ack.acknowledge();
-    }
-
     // ----------------------------- kaohsiungWrb upload -----------------------------------
     @KafkaListener(id = "kafka_consumer_service_java-kaohsiungWrb-0", topics = "sensordata", groupId = "kafka_consumer_service_java-kaohsiungWrb")
     public void listenWavegisSensorKaohsiungWrb(String kafkaMessage, Acknowledgment ack) {
@@ -112,16 +90,5 @@ public class KafkaConsumer {
         ack.acknowledge();
     }
     
-    @KafkaListener(id = "kafka_consumer_service_java-kaohsiungWrb-1", topics = "sensordata_post", groupId = "kafka_consumer_service_java-kaohsiungWrb")
-    public void listenOtherSensorKaohsiungWrb(String kafkaMessage, Acknowledgment ack) {
-
-        String stNo = kafkaMessage.split(",")[0];
-        String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata_post", PublisherEnum.kaohsiungWrb, stNo, kafkaMessage);
-
-        ack.acknowledge();
-    }
-
 
 }
