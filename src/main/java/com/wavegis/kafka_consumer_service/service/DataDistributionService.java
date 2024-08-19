@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
+import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
@@ -68,57 +69,52 @@ public class DataDistributionService {
         };
     }
     
-    public void distribution(String topices, String st_no, String kafka_message) {
-
-        CompletableFuture<Void> futureIow = CompletableFuture.runAsync(() -> {
-            if(iowSensorDtoMap.containsKey(st_no)) {
-                KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
-                logger.info("Iow---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                        topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+    public void distribution(String topices, PublisherEnum publisherEnum, String st_no, String kafka_message) {
+        // if (true) {
+        //     System.out.printf("%s,%s,%s: %s\n", topices, publisherEnum.name(), st_no, kafka_message);
+        //     return;
+        // }
+        switch (publisherEnum) {
+            case iow: {
+                if(iowSensorDtoMap.containsKey(st_no)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
+                    logger.info("Iow---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+                }
+                break;
             }
-        },executor);
-
-        CompletableFuture<Void> futureNtou = CompletableFuture.runAsync(() -> {
-            if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
-                KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
-                logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
-                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
+            case ntou: {
+                if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+                    logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
+                }
+                break;
             }
-        },executor);
-        
-        CompletableFuture<Void> futureTpesewer = CompletableFuture.runAsync(() -> {
-            if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
-                KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
-                logger.info("Tpesewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+            case tpeSewer: {
+                if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
+                    logger.info("Tpesewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+                break;
             }
-        },executor);
-        
-        CompletableFuture<Void> futureKaohsiungWrb = CompletableFuture.runAsync(() -> {
-            if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
-                KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
-                logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+            case kaohsiungWrb: {
+                if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
+                    logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+                break;
             }
-        },executor);
-        
-        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureIow, futureNtou, futureTpesewer, futureKaohsiungWrb);
-        allFutures.join();
-        allFutures.exceptionally(ex -> {
-            logger.error("Exception occurred while processing tasks asynchronously: {}",
-                    ex.getMessage());
-            return null;
-        });
-        
-        try {
-            allFutures.get(60, TimeUnit.SECONDS); // 設置最多等待 60 秒
-        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-            logger.error("Timeout or exception occurred while waiting for tasks to complete: {}",
-                    ex.getMessage());
+            default: {
+                logger.warn("upload type={} not impl", publisherEnum.name());
+                break;
+            }
         }
     }
 
