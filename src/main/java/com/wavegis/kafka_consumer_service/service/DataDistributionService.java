@@ -24,7 +24,8 @@ import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
-import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherSewerPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.TpeSewerPublisherPostVO;
 import com.wavegis.kafka_consumer_service.util.Util;
@@ -103,10 +104,16 @@ public class DataDistributionService {
                 break;
             }
             case kaohsiungWrb: {
-                if(kaohsiungWrbService.hasStnosByKafkaString(kafka_message)) {
+                if(kaohsiungWrbService.hasStnosByKafkaStringSewer(kafka_message)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = kaohsiungWrbService.postData(Collections.singletonList(new KaohsiungWrbPublisherPostVO().fromKafkaDTO(dto)));
-                    logger.info("KaohsiungWrb---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                    int resCode = kaohsiungWrbService.postDataSewer(Collections.singletonList(new KaohsiungWrbPublisherSewerPostVO().fromKafkaDTO(dto)));
+                    logger.info("KaohsiungWrb.sewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+                if(kaohsiungWrbService.hasStnosByKafkaStringFlood(kafka_message)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = kaohsiungWrbService.postDataFlood(Collections.singletonList(new KaohsiungWrbPublisherFloodPostVO().fromKafkaDTO(dto)));
+                    logger.info("KaohsiungWrb.flood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;
