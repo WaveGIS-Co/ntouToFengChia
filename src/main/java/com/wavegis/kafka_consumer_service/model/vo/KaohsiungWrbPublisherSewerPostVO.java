@@ -3,7 +3,7 @@ package com.wavegis.kafka_consumer_service.model.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 
-public class KaohsiungWrbPublisherPostVO {
+public class KaohsiungWrbPublisherSewerPostVO {
 
     @JsonProperty("batteryvol")
     private Double batteryvol;
@@ -26,8 +26,8 @@ public class KaohsiungWrbPublisherPostVO {
     @JsonProperty("version")
     private String version;
 
-    public KaohsiungWrbPublisherPostVO fromKafkaDTO(KafkaDTO vo) {
-        KaohsiungWrbPublisherPostVO model = this;
+    public KaohsiungWrbPublisherSewerPostVO fromKafkaDTO(KafkaDTO vo) {
+        KaohsiungWrbPublisherSewerPostVO model = this;
         model.setStNo(vo.getStNo());
         model.setDatatime(vo.getDatatime());
         model.setBatteryvol(vo.getBattery());
