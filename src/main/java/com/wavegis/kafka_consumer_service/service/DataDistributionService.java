@@ -1,16 +1,10 @@
 package com.wavegis.kafka_consumer_service.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import javax.annotation.PostConstruct;
 
@@ -21,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
-import com.wavegis.kafka_consumer_service.model.dto.NtouSensorListDTO;
+import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
@@ -49,7 +43,7 @@ public class DataDistributionService {
 
     private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
-    private Map<String,List<NtouSensorListDTO>> ntouSensorDtoMap = NtouPublisherApiService.ntouSensorDtoMap;
+    private Map<String,List<NtouDevicesDTO>> ntouDevicesDtoMap = NtouPublisherApiService.ntouDevicesDtoMap;
     
     private Function<String, KafkaDTO> prepareDto;
     
@@ -86,9 +80,10 @@ public class DataDistributionService {
                 break;
             }
             case ntou: {
-                if(ntouSensorDtoMap.containsKey(st_no.toLowerCase())) {
+                if(ntouDevicesDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+//                    int resCode = 200;
                     logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
                 }
