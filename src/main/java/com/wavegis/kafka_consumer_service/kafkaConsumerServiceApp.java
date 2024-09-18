@@ -25,7 +25,7 @@ public class kafkaConsumerServiceApp implements ApplicationRunner{
         //初始化Iow關聯表
         iowPublisherApiService.initIowSensorDtoMap(true);
         //初始化Ntou關聯表
-        ntouPublisherApiService.initNtouSensorDtoMap(true);
+        ntouPublisherApiService.initNtouDevicesDtoMap(true);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class kafkaConsumerServiceApp implements ApplicationRunner{
         
         Runnable reGetSensorListData = () ->{
             iowPublisherApiService.initIowSensorDtoMap(false);
-            ntouPublisherApiService.initNtouSensorDtoMap(false);
+            ntouPublisherApiService.initNtouDevicesDtoMap(false);
         };
         schedulerPoolTaskService.addTaskToScheduler(reGetSensorListData, "0 0 * * * *", "ReSensorList");
     }
