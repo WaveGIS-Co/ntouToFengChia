@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wavegis.kafka_consumer_service.model.vo.IowSensorListVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouSensorListVO;
+import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -26,4 +27,10 @@ public interface IPostgresApiService {
         @Query ("device_type") String device_type,
         @Query ("stt_no") String stt_no,
         @Query ("dev_id") String dev_id);
+    
+    @GET(value = "ntouPublisher/data/ntouDevices")
+    Call<List<NtouDevicesDTO>> getDataNtouDevices(
+        @Query ("org_id") String orgId,
+        @Query ("dev_id") String devId,
+        @Query ("dev_purpose") String devPurpose);
 }
