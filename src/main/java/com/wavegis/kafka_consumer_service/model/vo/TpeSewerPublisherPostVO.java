@@ -49,7 +49,7 @@ public class TpeSewerPublisherPostVO {
         model.setSendtime(vo.getSendtime());
         model.setBattery(vo.getBattery());
         model.setRssi(Double.valueOf(vo.getRssi()));
-        model.setSpeed(vo.getSpeed());
+        model.setSpeed(vo.getSpeed().toString());
         model.setWaterInner(vo.getWaterInner());
         model.setWaterInnerBed(vo.getWaterInnerBed());
         model.setVersion(vo.getVersion());
