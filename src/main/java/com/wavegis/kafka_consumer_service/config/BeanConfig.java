@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import com.wavegis.kafka_consumer_service.api.IChanghuaSewerageDepartmentApiService;
 import com.wavegis.kafka_consumer_service.api.IIowPublisherService;
 import com.wavegis.kafka_consumer_service.api.IKaohsiungWrbService;
 import com.wavegis.kafka_consumer_service.api.INtouPublisherService;
@@ -42,6 +43,11 @@ public class BeanConfig {
     @Bean
     public IKaohsiungWrbService iKaohsiungWrbService() {
         return RetrofitFactory.createService(IKaohsiungWrbService.class, serviceConfig.getApiKaohsiungWrbUrl()); 
+    }
+    
+    @Bean
+    public IChanghuaSewerageDepartmentApiService iChanghuaSewerageDepartmentApiService() {
+        return RetrofitFactory.createService(IChanghuaSewerageDepartmentApiService.class, serviceConfig.getApiChanghuaVmUrl()); 
     }
 	
 	@Bean

@@ -58,10 +58,12 @@ public class KafkaConsumer {
     @KafkaListener(id = "kafka_consumer_service_java-ntou-0", topics = "sensordata", groupId = "kafka_consumer_service_java-ntou")
     public void listenWavegisSensorNtou(String kafkaMessage, Acknowledgment ack) {
 
-        String stNo = kafkaMessage.split(",")[0];
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
         dataDistributionService.distribution("sensordata", PublisherEnum.ntou, stNo, kafkaMessage);
+        
+        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, stNo, kafkaMessage);
         
         ack.acknowledge();
     }

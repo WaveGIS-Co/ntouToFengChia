@@ -17,6 +17,7 @@ import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
+import com.wavegis.kafka_consumer_service.model.vo.ChsewerPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherSewerPostVO;
@@ -40,6 +41,9 @@ public class DataDistributionService {
     
     @Autowired
     private KaohsiungWrbService kaohsiungWrbService;
+    
+    @Autowired
+    private ChanghuaService changhuaService;
 
     private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
@@ -48,6 +52,35 @@ public class DataDistributionService {
     private Function<String, KafkaDTO> prepareDto;
     
     private ExecutorService executor;
+    
+    private final String floodStNos = 
+            "00109flood019033,00109flood019038,00109flood019021,00109flood019036,00109flood019006,00109flood019017,00109flood019022"
+            + ",00109flood019005,00109flood019012,00109flood019011,00109flood019027,00109flood019043,0000000011110050"
+            + ",0000000011110036,0000000011110016,00109flood019015,00109flood019016,00109flood019019,00109flood019042"
+            + ",00109flood019026,00109flood019030,00109flood019010,00109flood019004,0000000011110031,00109flood019034"
+            + ",00109flood019037,00109flood019035,00109flood019039,0000000011110042,0000000011110044,00109flood019024"
+            + ",00109flood019013,00109flood019018,0000000011110028,0000000011110033,00109flood019001,00109flood019031"
+            + ",0000000011110040,00109flood019014,0000000011110027,00109flood019020,00109flood019025,0000000011110051"
+            + ",00109flood019003,00109flood019007,0000000011110022,0000000011110021,0000000011110049,0000000011110025"
+            + ",0000000011110026,00109flood019009,00109flood019008,0000000011110038,00109flood019023,00109flood019045"
+            + ",0000000011110029,00109flood019044,00109flood019040,00109flood019032,00109flood019029,00109flood019028"
+            + ",00109flood019002,0000000011110043,0000000011110047,0000000011110037,0000000011110039,0000000011110030"
+            + ",0000000011110023,0000000011110048,00109flood019041";
+ 
+    private final String waterStNos = 
+            "0000000011110010,0000000011110011,0000000011110024,0000000011110032,0000000011110034,0000000011110035"
+            + ",0000000011110046,000000wra0400001,000000wra0400002,000000wra0400003,000000wra0400004"
+            + ",00109water019002,00109water019003,00109water019004,00109water019005,00109water019006,00109water019007"
+            + ",00109water019008,00109water019009,00109water019010"
+            + ",A34-TPQ1,A36-WGQ1,A37-KCPS,A38-SYQ1,A39-SGYH,A40-HXQ1,A41-GH000022,A42-GH000020,A43-GH000021"
+            + ",WG_P_W_00392,WG_RR_W_00061,WG_RR_W_00062,WG_RR_W_00063,WG_RR_W_00064,WG_RR_W_00065,WG_RR_W_00066,WG_RR_W_00067"
+            + ",WG_RR_W_00068,WG_RR_W_00069,WG_RR_W_00070,WG_RR_W_00071,WG_RR_W_00072,WG_RR_W_00073,WG_RR_W_00074,WG_RR_W_00075"
+            + ",WG_RR_W_00076,WG_RR_W_00078,WG_RR_W_00079,WG_RR_W_00080,WG_RR_W_00081,WG_RR_W_00082,WG_RR_W_00083,WG_RR_W_00084"
+            + ",WG_RR_W_00085,WG_RR_W_00086,WG_RR_W_00087,WG_RR_W_00089,WG_RR_W_00090,WG_RR_W_00094,WG_RR_W_00096,WG_RR_W_00097"
+            + ",WG_RR_W_001000,WG_RR_W_00101,WG_RR_W_00102,WG_RR_W_00103,WG_RR_W_00104,WG_RR_W_00105,WG_RR_W_00106,WG_RR_W_00107"
+            + ",WG_RR_W_00108,WG_RR_W_00109,WG_RR_W_00110,WG_RR_W_00111,WG_RR_W_00112,WG_RR_W_00113,WG_RR_W_00114,WG_RR_W_00115"
+            + ",WG_RR_W_00116,WG_RR_W_00117";
+
     
     @PostConstruct
     private void init() {
@@ -111,6 +144,17 @@ public class DataDistributionService {
                     logger.info("KaohsiungWrb.flood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
+                break;
+            }
+            case changhuaSewer: {
+                
+                if(floodStNos.indexOf(st_no) >= 0 || waterStNos.indexOf(st_no) >= 0) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = changhuaService.postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                    logger.info("changhuaSewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+                
                 break;
             }
             default: {
