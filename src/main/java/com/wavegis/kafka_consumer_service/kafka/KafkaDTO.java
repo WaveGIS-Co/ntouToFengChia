@@ -22,19 +22,19 @@ public class KafkaDTO {
     private String sendtime;
     
     @JsonProperty("battery")
-    private double battery;
+    private Double battery;
     
     @JsonProperty("rssi")
-    private String rssi;
+    private Double rssi;
     
     @JsonProperty("speed")
-    private String speed;
+    private Double speed;
     
     @JsonProperty("water_inner")
-    private double waterInner;
+    private Double waterInner;
     
     @JsonProperty("water_inner_bed")
-    private double waterInnerBed;
+    private Double waterInnerBed;
     
     @JsonProperty("version")
     private String version;
@@ -50,8 +50,8 @@ public class KafkaDTO {
         this.datatime = strs[3];
         this.sendtime = strs[4];
         this.battery = Double.valueOf(strs[5]);
-        this.rssi = strs[6];
-        this.speed = strs[7];
+        this.rssi = Double.valueOf(strs[6]);
+        this.speed = Double.valueOf(strs[7]);
         this.waterInner = Double.valueOf(strs[8]);
         this.waterInnerBed = Double.valueOf(strs[9]);
         this.version = strs[10].replace("\"", "");
@@ -115,19 +115,19 @@ public class KafkaDTO {
         this.battery = battery;
     }
 
-    public String getRssi() {
+    public Double getRssi() {
         return rssi;
     }
 
-    public void setRssi(String rssi) {
+    public void setRssi(Double rssi) {
         this.rssi = rssi;
     }
 
-    public String getSpeed() {
+    public Double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(String speed) {
+    public void setSpeed(Double speed) {
         this.speed = speed;
     }
 
