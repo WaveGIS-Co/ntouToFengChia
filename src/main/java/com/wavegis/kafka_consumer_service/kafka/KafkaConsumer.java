@@ -65,6 +65,8 @@ public class KafkaConsumer {
         
         dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, stNo, kafkaMessage);
         
+        dataDistributionService.distribution("sensordata", PublisherEnum.ntpc, stNo, kafkaMessage);
+        
         ack.acknowledge();
     }
     

@@ -26,6 +26,8 @@ public class ServiceConfig {
     private String apiKaohsiungWrbUrl;
     
     private String apiChanghuaVmUrl;
+    
+    private String apiNtpcBaseUrl;
 	
 	private String scheduleTime;
 
@@ -115,6 +117,14 @@ public class ServiceConfig {
 
     public void setApiChanghuaVmUrl(String apiChanghuaVmUrl) {
         this.apiChanghuaVmUrl = apiChanghuaVmUrl;
+    }
+
+    public String getApiNtpcBaseUrl() {
+        return apiNtpcBaseUrl;
+    }
+
+    public void setApiNtpcBaseUrl(String apiNtpcBaseUrl) {
+        this.apiNtpcBaseUrl = apiNtpcBaseUrl;
     }
  
 }

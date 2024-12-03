@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
+import com.wavegis.kafka_consumer_service.model.dto.FloodValueAllDTO;
+import com.wavegis.kafka_consumer_service.model.dto.FloodValueDTO;
+import com.wavegis.kafka_consumer_service.model.dto.FloodValueNotifyDTO;
 import com.wavegis.kafka_consumer_service.model.dto.IowSensorListDTO;
 import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
@@ -44,6 +47,9 @@ public class DataDistributionService {
     
     @Autowired
     private ChanghuaService changhuaService;
+    
+    @Autowired
+    private NewTaipeiService newTaipeiService;
 
     private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
@@ -108,7 +114,7 @@ public class DataDistributionService {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
                     logger.info("Iow---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                            topices, resCode, st_no, dto.getWaterInner(), dto.getDatatime());
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;
             }
@@ -155,6 +161,15 @@ public class DataDistributionService {
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 
+                break;
+            }
+            case ntpc: {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                if("110".equals(dto.getOrgId())) {
+                    int resCode = newTaipeiService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
+                    logger.info("ntpc---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
                 break;
             }
             default: {

@@ -8,6 +8,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import com.wavegis.kafka_consumer_service.api.IChanghuaSewerageDepartmentApiService;
 import com.wavegis.kafka_consumer_service.api.IIowPublisherService;
 import com.wavegis.kafka_consumer_service.api.IKaohsiungWrbService;
+import com.wavegis.kafka_consumer_service.api.INewTaipeiService;
 import com.wavegis.kafka_consumer_service.api.INtouPublisherService;
 import com.wavegis.kafka_consumer_service.api.IPostgresApiService;
 import com.wavegis.kafka_consumer_service.api.ITpeSewerPublisherService;
@@ -48,6 +49,11 @@ public class BeanConfig {
     @Bean
     public IChanghuaSewerageDepartmentApiService iChanghuaSewerageDepartmentApiService() {
         return RetrofitFactory.createService(IChanghuaSewerageDepartmentApiService.class, serviceConfig.getApiChanghuaVmUrl()); 
+    }
+    
+    @Bean
+    public INewTaipeiService iNewTaipeiService() {
+        return RetrofitFactory.createService(INewTaipeiService.class, serviceConfig.getApiNtpcBaseUrl()); 
     }
 	
 	@Bean
