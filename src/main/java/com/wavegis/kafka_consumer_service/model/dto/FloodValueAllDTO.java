@@ -12,6 +12,9 @@ public class FloodValueAllDTO {
 
 	@JsonProperty("datatime")
 	private String datatime;
+	
+	@JsonProperty("device_type")
+	private String deviceType;
 
 	@JsonProperty("water")
 	private Double waterInner;
@@ -147,12 +150,20 @@ public class FloodValueAllDTO {
         this.version = version;
     }
 
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
     @Override
     public String toString() {
-        return "FloodValueAllDTO [stNo=" + stNo + ", orgId=" + orgId + ", datatime=" + datatime + ", waterInner="
-                + waterInner + ", battery=" + battery + ", rssi=" + rssi + ", speed=" + speed + ", exValue1=" + exValue1
-                + ", exValue2=" + exValue2 + ", trust=" + trust + ", kafka=" + kafka + ", olddata=" + olddata
-                + ", version=" + version + "]";
+        return "FloodValueAllDTO [stNo=" + stNo + ", orgId=" + orgId + ", datatime=" + datatime + ", deviceType="
+                + deviceType + ", waterInner=" + waterInner + ", battery=" + battery + ", rssi=" + rssi + ", speed="
+                + speed + ", exValue1=" + exValue1 + ", exValue2=" + exValue2 + ", trust=" + trust + ", kafka=" + kafka
+                + ", olddata=" + olddata + ", version=" + version + "]";
     }
 
 }

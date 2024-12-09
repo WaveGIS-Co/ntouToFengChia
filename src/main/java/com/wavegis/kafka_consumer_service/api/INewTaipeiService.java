@@ -22,6 +22,9 @@ public interface INewTaipeiService {
     @POST(value = "flood/postFloodValue_All")
     Call<ResponseBody> postFloodValueAll(@Body List<FloodValueAllDTO> dtos);
     
+    @POST(value = "flood/postFloodValue_All_Re")
+    Call<ResponseBody> postFloodValueAllRe(@Body List<FloodValueAllDTO> dtos);
+    
     @POST(value = "flood/postFloodValue")
     Call<ResponseBody> postFloodValue(@Body List<FloodValueDTO> dtos);
     

@@ -167,7 +167,7 @@ public class DataDistributionService {
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 if("110".equals(dto.getOrgId())) {
                     int resCode = newTaipeiService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
-                    logger.info("ntpc---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                    logger.info("Ntpc---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;

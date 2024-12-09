@@ -30,9 +30,10 @@ public class NewTaipeiService {
             item.setTrust(true);
             item.setKafka(false);
             item.setOlddata(false);
+            item.setVersion(item.getVersion() + "-187.java.kafka");
         });
 //        System.out.println(dtos.toString());
-        return this.postFloodValue_All(dtos);
+        return this.postFloodValue_All_Re(dtos);
     }
     
     private int postFloodValue_notify(List<FloodValueNotifyDTO> dtos) {
@@ -41,9 +42,9 @@ public class NewTaipeiService {
         return responseCode;
     }
     
-    private int postFloodValue_All(List<FloodValueAllDTO> dtos) {
-        Call<ResponseBody> call = iNewTaipeiService.postFloodValueAll(dtos);
-        int responseCode = Util.callApiResponseCode(call, "postFloodValue_All");
+    private int postFloodValue_All_Re(List<FloodValueAllDTO> dtos) {
+        Call<ResponseBody> call = iNewTaipeiService.postFloodValueAllRe(dtos);
+        int responseCode = Util.callApiResponseCode(call, "postFloodValue_All_Re");
         return responseCode;
     }
     
