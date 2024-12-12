@@ -50,6 +50,9 @@ public class DataDistributionService {
     
     @Autowired
     private NewTaipeiService newTaipeiService;
+    
+    @Autowired
+    private NewTaipeiSewerService newTaipeiSewerService;
 
     private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
     
@@ -168,6 +171,15 @@ public class DataDistributionService {
                 if("110".equals(dto.getOrgId())) {
                     int resCode = newTaipeiService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
                     logger.info("Ntpc---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+                break;
+            }
+            case ntpcSewer: {
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                if("110".equals(dto.getOrgId())) {
+                    int resCode = newTaipeiSewerService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
+                    logger.info("NtpcSewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;
