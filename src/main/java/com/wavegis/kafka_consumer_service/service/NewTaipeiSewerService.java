@@ -12,6 +12,7 @@ import com.wavegis.kafka_consumer_service.model.dto.FloodListAllDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueAllDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueNotifyDTO;
+import com.wavegis.kafka_consumer_service.model.dto.RainDataDTO;
 import com.wavegis.kafka_consumer_service.util.Util;
 
 import okhttp3.ResponseBody;
@@ -36,6 +37,12 @@ public class NewTaipeiSewerService {
         return this.postFloodValue_All_Re(dtos);
     }
     
+    public int postRainData(List<RainDataDTO> dtos) {
+//        System.out.println(dtos.toString());
+//        return 200;
+      return this.postRainDataApi(dtos);
+  }
+    
     private int postFloodValue_notify(List<FloodValueNotifyDTO> dtos) {
         Call<ResponseBody> call = iNewTaipeiSewerService.postFloodValueNotify(dtos);
         int responseCode = Util.callApiResponseCode(call, "postFloodValue_notify");
@@ -51,6 +58,12 @@ public class NewTaipeiSewerService {
     private int postFloodValue(List<FloodValueDTO> dtos) {
         Call<ResponseBody> call = iNewTaipeiSewerService.postFloodValue(dtos);
         int responseCode = Util.callApiResponseCode(call, "postFloodValue");
+        return responseCode;
+    }
+    
+    private int postRainDataApi(List<RainDataDTO> dtos) {
+        Call<ResponseBody> call = iNewTaipeiSewerService.postRainData(dtos);
+        int responseCode = Util.callApiResponseCode(call, "postRainData");
         return responseCode;
     }
     

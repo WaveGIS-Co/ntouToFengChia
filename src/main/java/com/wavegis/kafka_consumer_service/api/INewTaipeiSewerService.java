@@ -6,6 +6,7 @@ import com.wavegis.kafka_consumer_service.model.dto.FloodListAllDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueAllDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueNotifyDTO;
+import com.wavegis.kafka_consumer_service.model.dto.RainDataDTO;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -27,6 +28,9 @@ public interface INewTaipeiSewerService {
     
     @POST(value = "flood/postFloodValue")
     Call<ResponseBody> postFloodValue(@Body List<FloodValueDTO> dtos);
+    
+    @POST(value = "rain/postRainData")
+    Call<ResponseBody> postRainData(@Body List<RainDataDTO> dtos);
     
     @GET(value = "flood/getFloodListAll")
     Call<List<FloodListAllDTO>> getFloodListAll(

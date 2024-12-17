@@ -38,7 +38,7 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata", PublisherEnum.iow, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.iow, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
@@ -49,7 +49,7 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata_post", PublisherEnum.iow, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata_post", PublisherEnum.iow, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
     }
@@ -61,13 +61,9 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata", PublisherEnum.ntou, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
         
-        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, stNo, kafkaMessage);
-      
-        dataDistributionService.distribution("sensordata", PublisherEnum.ntpc, stNo, kafkaMessage);
-        
-        dataDistributionService.distribution("sensordata", PublisherEnum.ntpcSewer, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
@@ -78,7 +74,7 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata_post", PublisherEnum.ntou, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata_post", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
     }
@@ -90,7 +86,7 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata", PublisherEnum.tpeSewer, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.tpeSewer, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
@@ -102,7 +98,36 @@ public class KafkaConsumer {
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
         this.filterDatas(orgId, stNo);
-        dataDistributionService.distribution("sensordata", PublisherEnum.kaohsiungWrb, stNo, kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.kaohsiungWrb, orgId, stNo, kafkaMessage);
+        
+        ack.acknowledge();
+    }
+    
+    // ----------------------------- ntpc upload -----------------------------------
+    @KafkaListener(id = "kafka_consumer_service_java-ntpc-0", topics = "sensordata", groupId = "kafka_consumer_service_java-ntpc")
+    public void listenWavegisSensorNtpc(String kafkaMessage, Acknowledgment ack) {
+
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+        String orgId = kafkaMessage.split(",")[1];
+        this.filterDatas(orgId, stNo);
+      
+        dataDistributionService.distribution("sensordata", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
+        
+        dataDistributionService.distribution("sensordata", PublisherEnum.ntpcSewer, orgId, stNo, kafkaMessage);
+        
+        ack.acknowledge();
+    }
+    
+    @KafkaListener(id = "kafka_consumer_service_java-ntpc-1", topics = "raindata", groupId = "kafka_consumer_service_java-ntpc")
+    public void listenWavegisRaindataNtpc(String kafkaMessage, Acknowledgment ack) {
+
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+        String orgId = kafkaMessage.split(",")[1];
+        this.filterDatas(orgId, stNo);
+      
+        dataDistributionService.distribution("raindata", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
+        
+        dataDistributionService.distribution("raindata", PublisherEnum.ntpcSewer, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
