@@ -39,4 +39,6 @@ wavegis:
     api-187-tpesewer-url: 'http://52.187.182.187/api/tpesewer/'
     api-kaohsiung-wrb-url: 'http://52.187.182.187/api/kaohsiungWrb/'
     api-changhua-vm-url: 'https://changhuafloodsmartweb.chcg.gov.tw/'
+    api-ntpc-base-url: 'https://www.wrsntpc.ntpc.gov.tw/api/wavegis_base/water/'
+    api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
 
