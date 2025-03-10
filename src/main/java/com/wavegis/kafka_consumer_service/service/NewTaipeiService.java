@@ -1,6 +1,8 @@
 package com.wavegis.kafka_consumer_service.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,8 @@ public class NewTaipeiService {
 
     private static final Logger logger = LoggerFactory.getLogger(NewTaipeiService.class);
     
+    private Map<String,String> floodLastTimeMap = new HashMap<String,String>();
+    
     @Autowired
     private INewTaipeiService iNewTaipeiService;
 
@@ -30,7 +34,7 @@ public class NewTaipeiService {
         dtos.stream().forEach(item ->{
             item.setTrust(true);
             item.setKafka(false);
-            item.setOlddata(false);
+            item.setOlddata(this.checkLastTime(item.getStNo(), item.getDatatime()));
             item.setVersion(item.getVersion() + "-187.java.kafka");
         });
 //        System.out.println(dtos.toString());
@@ -41,6 +45,25 @@ public class NewTaipeiService {
 //        System.out.println(dtos.toString());
 //        return 200;
         return this.postRainDataApi(dtos);
+    }
+    
+    private Boolean checkLastTime(String st_no, String datatime) {
+        try {
+            if(floodLastTimeMap.get(st_no) == null) {
+                floodLastTimeMap.put(st_no, datatime);
+                return false;
+            }
+            
+            if(Util.stringToLocalDateTime(datatime).isBefore(Util.stringToLocalDateTime(floodLastTimeMap.get(st_no)))) {
+               return true;
+            }else {
+                floodLastTimeMap.put(st_no, datatime);
+                return false;
+            }
+        } catch (Exception e) {
+            logger.error("error={}",e.getMessage());
+            return false;
+        }
     }
     
     private int postFloodValue_notify(List<FloodValueNotifyDTO> dtos) {

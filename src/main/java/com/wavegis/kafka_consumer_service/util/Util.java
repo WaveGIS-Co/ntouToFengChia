@@ -2,6 +2,8 @@ package com.wavegis.kafka_consumer_service.util;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +22,15 @@ import retrofit2.Response;
 public class Util {
 
 	private static final Logger logger = LoggerFactory.getLogger(Util.class);
+	
+	public final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	
+	public static LocalDateTime localDateTime;
+	
+    public static LocalDateTime stringToLocalDateTime(String str) {
+        localDateTime = LocalDateTime.parse(str, formatter);
+        return localDateTime;
+    }
 
 	public static <T> List<T> replaceNullToList(List<T> list) {
 		if (list == null) {
