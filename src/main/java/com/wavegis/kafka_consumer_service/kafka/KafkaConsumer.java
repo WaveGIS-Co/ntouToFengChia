@@ -63,7 +63,7 @@ public class KafkaConsumer {
         this.filterDatas(orgId, stNo);
         dataDistributionService.distribution("sensordata", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
         
-        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, orgId, stNo, kafkaMessage);
+//        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
@@ -128,6 +128,19 @@ public class KafkaConsumer {
         dataDistributionService.distribution("raindata", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
         
         dataDistributionService.distribution("raindata", PublisherEnum.ntpcSewer, orgId, stNo, kafkaMessage);
+        
+        ack.acknowledge();
+    }
+    
+    // ----------------------------- changhuaSewer upload -----------------------------------
+    @KafkaListener(id = "kafka_consumer_service_java-changhuaSewer-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaSewer")
+    public void listenWavegisSensorChanghuaSewer(String kafkaMessage, Acknowledgment ack) {
+
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+        String orgId = kafkaMessage.split(",")[1];
+        this.filterDatas(orgId, stNo);
+        
+        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, orgId, stNo, kafkaMessage);
         
         ack.acknowledge();
     }
