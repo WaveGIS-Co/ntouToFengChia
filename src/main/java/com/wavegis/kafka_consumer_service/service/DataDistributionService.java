@@ -55,9 +55,9 @@ public class DataDistributionService {
     @Autowired
     private NewTaipeiSewerService newTaipeiSewerService;
 
-    private Map<String,List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
+    private Map<String, List<IowSensorListDTO>> iowSensorDtoMap = IowPublisherApiService.iowSensorDtoMap;
 
-    private Map<String,List<NtouDevicesDTO>> ntouDevicesDtoMap = NtouPublisherApiService.ntouDevicesDtoMap;
+    private Map<String, List<NtouDevicesDTO>> ntouDevicesDtoMap = NtouPublisherApiService.ntouDevicesDtoMap;
 
     private Function<String, KafkaDTO> prepareDto;
 
@@ -65,8 +65,10 @@ public class DataDistributionService {
 
     private ExecutorService executor;
 
-    private final String floodStNos =
-            "00109flood019033,00109flood019038,00109flood019021,00109flood019036,00109flood019006,00109flood019017,00109flood019022"
+    @Autowired
+    private FilterService filterService;
+
+    private final String floodStNos = "00109flood019033,00109flood019038,00109flood019021,00109flood019036,00109flood019006,00109flood019017,00109flood019022"
             + ",00109flood019005,00109flood019012,00109flood019011,00109flood019027,00109flood019043,0000000011110050"
             + ",0000000011110036,0000000011110016,00109flood019015,00109flood019016,00109flood019019,00109flood019042"
             + ",00109flood019026,00109flood019030,00109flood019010,00109flood019004,0000000011110031,00109flood019034"
@@ -79,8 +81,7 @@ public class DataDistributionService {
             + ",00109flood019002,0000000011110043,0000000011110047,0000000011110037,0000000011110039,0000000011110030"
             + ",0000000011110023,0000000011110048,00109flood019041";
 
-    private final String waterStNos =
-            "0000000011110010,0000000011110011,0000000011110024,0000000011110032,0000000011110034,0000000011110035"
+    private final String waterStNos = "0000000011110010,0000000011110011,0000000011110024,0000000011110032,0000000011110034,0000000011110035"
             + ",0000000011110046,000000wra0400001,000000wra0400002,000000wra0400003,000000wra0400004"
             + ",00109water019002,00109water019003,00109water019004,00109water019005,00109water019006,00109water019007"
             + ",00109water019008,00109water019009,00109water019010"
@@ -92,7 +93,6 @@ public class DataDistributionService {
             + ",WG_RR_W_001000,WG_RR_W_00101,WG_RR_W_00102,WG_RR_W_00103,WG_RR_W_00104,WG_RR_W_00105,WG_RR_W_00106,WG_RR_W_00107"
             + ",WG_RR_W_00108,WG_RR_W_00109,WG_RR_W_00110,WG_RR_W_00111,WG_RR_W_00112,WG_RR_W_00113,WG_RR_W_00114,WG_RR_W_00115"
             + ",WG_RR_W_00116,WG_RR_W_00117";
-
 
     @PostConstruct
     private void init() {
@@ -116,50 +116,57 @@ public class DataDistributionService {
         };
     }
 
-    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no, String kafka_message) {
+    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,
+            String kafka_message) {
         // if (true) {
-        //     System.out.printf("%s,%s,%s: %s\n", topices, publisherEnum.name(), st_no, kafka_message);
-        //     return;
+        // System.out.printf("%s,%s,%s: %s\n", topices, publisherEnum.name(), st_no,
+        // kafka_message);
+        // return;
         // }
         switch (publisherEnum) {
             case iow: {
-                if(iowSensorDtoMap.containsKey(st_no)) {
+                if (iowSensorDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = iowPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
+                    int resCode = iowPublisherApiService.postData(st_no,
+                            Collections.singletonList(Util.toVo(dto, new IowPublisherPostVO())));
                     logger.info("Iow---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;
             }
             case ntou: {
-                if(ntouDevicesDtoMap.containsKey(st_no)) {
+                if (ntouDevicesDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = ntouPublisherApiService.postData(st_no, Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
-//                    int resCode = 200;
+                    int resCode = ntouPublisherApiService.postData(st_no,
+                            Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+                    // int resCode = 200;
                     logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
                 }
                 break;
             }
             case tpeSewer: {
-                if(tpeSewerService.hasStnosByKafkaString(kafka_message)) {
+                if (tpeSewerService.hasStnosByKafkaString(kafka_message)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = tpeSewerService.postData(st_no, Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
+                    int resCode = tpeSewerService.postData(st_no,
+                            Collections.singletonList(new TpeSewerPublisherPostVO().fromKafkaDTO(dto)));
                     logger.info("Tpesewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
                 break;
             }
             case kaohsiungWrb: {
-                if(kaohsiungWrbService.hasStnosByKafkaStringSewer(kafka_message)) {
+                if (kaohsiungWrbService.hasStnosByKafkaStringSewer(kafka_message)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = kaohsiungWrbService.postDataSewer(Collections.singletonList(new KaohsiungWrbPublisherSewerPostVO().fromKafkaDTO(dto)));
+                    int resCode = kaohsiungWrbService.postDataSewer(
+                            Collections.singletonList(new KaohsiungWrbPublisherSewerPostVO().fromKafkaDTO(dto)));
                     logger.info("KaohsiungWrb.sewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
-                if(kaohsiungWrbService.hasStnosByKafkaStringFlood(kafka_message)) {
+                if (kaohsiungWrbService.hasStnosByKafkaStringFlood(kafka_message)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = kaohsiungWrbService.postDataFlood(Collections.singletonList(new KaohsiungWrbPublisherFloodPostVO().fromKafkaDTO(dto)));
+                    int resCode = kaohsiungWrbService.postDataFlood(
+                            Collections.singletonList(new KaohsiungWrbPublisherFloodPostVO().fromKafkaDTO(dto)));
                     logger.info("KaohsiungWrb.flood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
@@ -167,9 +174,10 @@ public class DataDistributionService {
             }
             case changhuaSewer: {
 
-                if(floodStNos.indexOf(st_no) >= 0 || waterStNos.indexOf(st_no) >= 0) {
+                if (floodStNos.indexOf(st_no) >= 0 || waterStNos.indexOf(st_no) >= 0) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = changhuaService.postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                    int resCode = changhuaService
+                            .postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
                     logger.info("changhuaSewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
@@ -185,8 +193,9 @@ public class DataDistributionService {
                     logger.info("changhuaFlood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
+                break;
             }
-             case changhuaWater: {
+            case changhuaWater: {
                 // yaml過濾資料
                 if (filterService.isWaterStation(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
@@ -197,39 +206,43 @@ public class DataDistributionService {
                 }
             }
             case ntpc: {
-                if(!"110".equals(org_id)) {
+                if (!"110".equals(org_id)) {
                     break;
                 }
 
-                if("raindata".equals(topices)) {
+                if ("raindata".equals(topices)) {
                     KafkaRainDTO dto = prepareRainDto.apply(kafka_message);
-                    int resCode = newTaipeiService.postRainData(Collections.singletonList(Util.toVo(dto, new RainDataDTO())));
+                    int resCode = newTaipeiService
+                            .postRainData(Collections.singletonList(Util.toVo(dto, new RainDataDTO())));
                     logger.info("Ntpc---topics={}, resCode={}, st_no={}, datatime={}, rain={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getRain());
                     break;
                 }
 
                 KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = newTaipeiService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
+                int resCode = newTaipeiService
+                        .postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
                 logger.info("Ntpc---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                         topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 break;
             }
             case ntpcSewer: {
-                if(!"110".equals(org_id)) {
+                if (!"110".equals(org_id)) {
                     break;
                 }
 
-                if("raindata".equals(topices)) {
+                if ("raindata".equals(topices)) {
                     KafkaRainDTO dto = prepareRainDto.apply(kafka_message);
-                    int resCode = newTaipeiSewerService.postRainData(Collections.singletonList(Util.toVo(dto, new RainDataDTO())));
+                    int resCode = newTaipeiSewerService
+                            .postRainData(Collections.singletonList(Util.toVo(dto, new RainDataDTO())));
                     logger.info("Ntpc---topics={}, resCode={}, st_no={}, datatime={}, rain={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getRain());
                     break;
                 }
 
                 KafkaDTO dto = prepareDto.apply(kafka_message);
-                int resCode = newTaipeiSewerService.postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
+                int resCode = newTaipeiSewerService
+                        .postData(Collections.singletonList(Util.toVo(dto, new FloodValueAllDTO())));
                 logger.info("NtpcSewer---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                         topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 break;
