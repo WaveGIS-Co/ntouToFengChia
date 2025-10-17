@@ -120,13 +120,8 @@ public class DataDistributionService {
         };
     }
 
-    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,
-            String kafka_message) {
-        // if (true) {
-        // System.out.printf("%s,%s,%s: %s\n", topices, publisherEnum.name(), st_no,
-        // kafka_message);
-        // return;
-        // }
+    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,String kafka_message) {
+
         switch (publisherEnum) {
             case iow: {
                 if (iowSensorDtoMap.containsKey(st_no)) {
@@ -204,7 +199,7 @@ public class DataDistributionService {
                 // yaml過濾資料
                 if (filterService.isWaterStation(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                      ChuploadPostVO vo = new ChuploadPostVO();
+                    ChuploadPostVO vo = new ChuploadPostVO();
                     int resCode = changhuaWatercenterService
                             .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
                     logger.info("changhuaWater---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
