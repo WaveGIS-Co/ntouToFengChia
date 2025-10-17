@@ -22,6 +22,7 @@ import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 import com.wavegis.kafka_consumer_service.model.dto.RainDataDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
 import com.wavegis.kafka_consumer_service.model.vo.ChsewerPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.ChuploadPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherSewerPostVO;
@@ -67,6 +68,9 @@ public class DataDistributionService {
 
     @Autowired
     private FilterService filterService;
+
+    @Autowired
+    private ChanghuaWatercenterService changhuaWatercenterService;
 
     private final String floodStNos = "00109flood019033,00109flood019038,00109flood019021,00109flood019036,00109flood019006,00109flood019017,00109flood019022"
             + ",00109flood019005,00109flood019012,00109flood019011,00109flood019027,00109flood019043,0000000011110050"
@@ -188,8 +192,9 @@ public class DataDistributionService {
                 // yaml過濾資料
                 if (filterService.isFloodStation(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = changhuaService
-                            .postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                    ChuploadPostVO vo = new ChuploadPostVO();
+                    int resCode = changhuaWatercenterService
+                            .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
                     logger.info("changhuaFlood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }
@@ -199,8 +204,9 @@ public class DataDistributionService {
                 // yaml過濾資料
                 if (filterService.isWaterStation(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = changhuaService
-                            .postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                      ChuploadPostVO vo = new ChuploadPostVO();
+                    int resCode = changhuaWatercenterService
+                            .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
                     logger.info("changhuaWater---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
                             topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
                 }

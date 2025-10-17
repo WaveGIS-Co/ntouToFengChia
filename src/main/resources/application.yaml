@@ -41,6 +41,7 @@ wavegis:
     api-changhua-vm-url: 'https://changhuafloodsmartweb.chcg.gov.tw/'
     api-ntpc-base-url: 'https://www.wrsntpc.ntpc.gov.tw/api/wavegis_base/water/'
     api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
+    api-changhua-uploader-base-url: 'http://59.124.12.195:5200/uploader/'
 
   filter:
   water-stnos:
