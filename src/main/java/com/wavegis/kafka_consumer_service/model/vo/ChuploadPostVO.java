@@ -39,7 +39,7 @@ public class ChuploadPostVO {
     @JsonProperty(value = "version")
     private String version; // 資料版本
 
-    //kafka資料轉拋彰化主機的轉換方法
+    //kafka資料轉拋彰化主機的格式轉換方法
     public ChuploadPostVO toChuploadPostVO(KafkaDTO dto) {
         ChuploadPostVO vo = new ChuploadPostVO();
         vo.setStNo(dto.getStNo());
