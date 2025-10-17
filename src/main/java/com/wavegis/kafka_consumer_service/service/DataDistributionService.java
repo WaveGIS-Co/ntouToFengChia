@@ -176,6 +176,26 @@ public class DataDistributionService {
 
                 break;
             }
+            case changhuaFlood: {
+                // yaml過濾資料
+                if (filterService.isFloodStation(st_no)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = changhuaService
+                            .postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                    logger.info("changhuaFlood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+            }
+             case changhuaWater: {
+                // yaml過濾資料
+                if (filterService.isWaterStation(st_no)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = changhuaService
+                            .postData(Collections.singletonList(Util.toVo(dto, new ChsewerPostVO())));
+                    logger.info("changhuaWater---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                }
+            }
             case ntpc: {
                 if(!"110".equals(org_id)) {
                     break;

@@ -161,4 +161,16 @@ public class KafkaConsumer {
 
     }
 
+    @KafkaListener(id = "kafka_consumer_service_java-changhuaWater-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaWater")
+    public void listenWavegisSensorChanghuaWater(String kafkaMessage, Acknowledgment ack) {
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+        String orgId = kafkaMessage.split(",")[1];
+        this.filterDatas(orgId, stNo);
+
+        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaWater, orgId, stNo, kafkaMessage);
+
+        ack.acknowledge();
+
+    }
+
 }
