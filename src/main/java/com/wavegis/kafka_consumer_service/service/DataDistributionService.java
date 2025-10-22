@@ -120,10 +120,16 @@ public class DataDistributionService {
         };
     }
 
-    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,String kafka_message) {
-
+    public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,
+            String kafka_message) {
+        logger.info("[DEBUG] distribution called with publisherEnum={}, st_no={}, org_id={}", publisherEnum, st_no,
+                org_id);
         switch (publisherEnum) {
             case iow: {
+                if ("test".equals(org_id)) {
+                    logger.info("IOW被觸發了!");
+                    break;
+                }
                 if (iowSensorDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = iowPublisherApiService.postData(st_no,
@@ -172,7 +178,10 @@ public class DataDistributionService {
                 break;
             }
             case changhuaSewer: {
-
+                if ("test".equals(org_id)) {
+                    logger.info("changhuaSewer被觸發了!");
+                    break;
+                }
                 if (floodStNos.indexOf(st_no) >= 0 || waterStNos.indexOf(st_no) >= 0) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = changhuaService
@@ -183,28 +192,26 @@ public class DataDistributionService {
 
                 break;
             }
-            case changhuaFlood: {
+            case changhuaFloodWater: {
+                if (!"109".equals(org_id)) {
+                logger.error("這不是彰化縣的資料!orgId={}", org_id);
+                break;
+                }
                 // yaml過濾資料
-                if (filterService.isFloodStation(st_no)) {
+                if (filterService.isFloodStation(st_no) || filterService.isWaterStation(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     ChuploadPostVO vo = new ChuploadPostVO();
-                    int resCode = changhuaWatercenterService
-                            .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
-                    logger.info("changhuaFlood---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
+                    vo = vo.toChuploadPostVO(dto);
+
+                    // int resCode = changhuaWatercenterService
+                    // .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
+                    int resCode = 200;
+                    logger.info(
+                            "[TEST MODE] changhuaFloodWater 彰化淹感水位模擬呼叫成功 ---topics={}, resCode={}, st_no={},org_id-{}, datatime={},deviceType={}, water={},battery={},rssi={},trust={},oldData={},version={}",
+                            topices, resCode, st_no, vo.getOrgId(), vo.getDatatime(), vo.getDeviceType(), vo.getWater(),
+                            vo.getBattery(), vo.getRssi(), vo.getTrust(), vo.getOlddata(), vo.getVersion());
                 }
                 break;
-            }
-            case changhuaWater: {
-                // yaml過濾資料
-                if (filterService.isWaterStation(st_no)) {
-                    KafkaDTO dto = prepareDto.apply(kafka_message);
-                    ChuploadPostVO vo = new ChuploadPostVO();
-                    int resCode = changhuaWatercenterService
-                            .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
-                    logger.info("changhuaWater---topics={}, resCode={}, st_no={}, datatime={}, water_inner={}",
-                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInner());
-                }
             }
             case ntpc: {
                 if (!"110".equals(org_id)) {

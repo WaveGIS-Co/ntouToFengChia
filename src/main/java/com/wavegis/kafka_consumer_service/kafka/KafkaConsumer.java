@@ -18,17 +18,18 @@ public class KafkaConsumer {
     @Autowired
     private DataDistributionService dataDistributionService;
 
-    private void filterDatas(String org_id, String st_no) {
+    private boolean filterDatas(String org_id, String st_no) {
 
         if (org_id == null || "test".equals(org_id)) {
-            logger.error("org_id={} is null or test", org_id);
-            return;
+            logger.warn("[FILTERED] org_id={} is null or test", org_id);
+            return false;
         }
 
-        if (st_no == null || "".equals(st_no)) {
-            logger.error("st_no is error");
-            return;
+        if (st_no == null || st_no.isEmpty()) {
+            logger.error("[FILTERED] st_no is null or empty");
+            return false;
         }
+        return true;
     }
 
     // ----------------------------- iow upload -----------------------------------
@@ -37,7 +38,10 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
+        // this.filterDatas(orgId, stNo);沒用的東西
         dataDistributionService.distribution("sensordata", PublisherEnum.iow, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
@@ -48,7 +52,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
         dataDistributionService.distribution("sensordata_post", PublisherEnum.iow, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
@@ -60,7 +66,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
         dataDistributionService.distribution("sensordata", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
 
         // dataDistributionService.distribution("sensordata",
@@ -74,7 +82,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+       if(!filterDatas(orgId, stNo)){
+            return;
+        }
         dataDistributionService.distribution("sensordata_post", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
@@ -87,7 +97,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+       if(!filterDatas(orgId, stNo)){
+            return;
+        }
         dataDistributionService.distribution("sensordata", PublisherEnum.tpeSewer, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
@@ -100,7 +112,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
         dataDistributionService.distribution("sensordata", PublisherEnum.kaohsiungWrb, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
@@ -112,7 +126,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
 
         dataDistributionService.distribution("sensordata", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
 
@@ -126,7 +142,9 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
 
         dataDistributionService.distribution("raindata", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
 
@@ -142,35 +160,28 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
 
         dataDistributionService.distribution("sensordata", PublisherEnum.changhuaSewer, orgId, stNo, kafkaMessage);
 
         ack.acknowledge();
     }
 
-    @KafkaListener(id = "kafka_consumer_service_java-changhuaFlood-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaFlood")
-    public void listenWavegisSensorChanghuaFlood(String kafkaMessage, Acknowledgment ack) {
+    @KafkaListener(id = "kafka_consumer_service_java-changhuaFloodWater-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaFloodWater")
+    public void listenWavegisSensorChanghuaFloodWater(String kafkaMessage, Acknowledgment ack) {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
-
-        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFlood, orgId, stNo, kafkaMessage);
-
+        if(!filterDatas(orgId, stNo)){
+            return;
+        }
+       System.out.println("接收到kafka-message:"+kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFloodWater, orgId, stNo, kafkaMessage);
         ack.acknowledge();
-
+        //filterDatas就是測試方便，需要測哪一個的時候把那個listener的filterDatas註解 然後測試資料org_id設為test
     }
 
-    @KafkaListener(id = "kafka_consumer_service_java-changhuaWater-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaWater")
-    public void listenWavegisSensorChanghuaWater(String kafkaMessage, Acknowledgment ack) {
-        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
-        String orgId = kafkaMessage.split(",")[1];
-        this.filterDatas(orgId, stNo);
 
-        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaWater, orgId, stNo, kafkaMessage);
-
-        ack.acknowledge();
-
-    }
 
 }

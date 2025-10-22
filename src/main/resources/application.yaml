@@ -43,61 +43,65 @@ wavegis:
     api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
     api-changhua-uploader-base-url: 'http://59.124.12.195:5200/uploader/'
 
-  filter:
+filter:
   water-stnos:
-    - WG_RR_W_00096
-    - WG_RR_W_00097
-    - WG_RR_W_001000
-    - WG_RR_W_00101
-    - WG_RR_W_00102
-    - WG_RR_W_00103
-    - WG_RR_W_00104
-    - WG_RR_W_00105
-    - WG_RR_W_00106
-    - WG_RR_W_00107
-    - WG_RR_W_00108
-    - WG_RR_W_00109
-    - WG_RR_W_00110
-    - WG_RR_W_00111
-    - WG_RR_W_00112
-    - WG_RR_W_00113
-    - WG_RR_W_00114
-    - WG_RR_W_00115
-    - WG_RR_W_00116
-    - WG_RR_W_00117
-    - WG_SRR_WS_00004
-    - WG_SRR_WS_00006
-    - WG_RR_W_00089
-    - WG_RR_W_00090
-    - WG_P_W_70003
-    - WG_P_W_70004
-    - WG_P_W_70002
-    - WG_P_W_70001
-    - WG_SRR_WS_00007
-    - WG_SRR_WS_00008
-    - WG_SRR_WS_00009
-    - WG_SRR_WS_00003
-    - WG_SRR_WS_00005
-    - WG_P_W_70005
+      - WG_RR_W_00096
+      - WG_RR_W_00097
+      - WG_RR_W_001000
+      - WG_RR_W_00101
+      - WG_RR_W_00102
+      - WG_RR_W_00103
+      - WG_RR_W_00104
+      - WG_RR_W_00105
+      - WG_RR_W_00106
+      - WG_RR_W_00107
+      - WG_RR_W_00108
+      - WG_RR_W_00109
+      - WG_RR_W_00110
+      - WG_RR_W_00111
+      - WG_RR_W_00112
+      - WG_RR_W_00113
+      - WG_RR_W_00114
+      - WG_RR_W_00115
+      - WG_RR_W_00116
+      - WG_RR_W_00117
+      - WG_SRR_WS_00004
+      - WG_SRR_WS_00006
+      - WG_RR_W_00089
+      - WG_RR_W_00090
+      - WG_P_W_70003
+      - WG_P_W_70004
+      - WG_P_W_70002
+      - WG_P_W_70001
+      - WG_SRR_WS_00007
+      - WG_SRR_WS_00008
+      - WG_SRR_WS_00009
+      - WG_SRR_WS_00003
+      - WG_SRR_WS_00005
+      - WG_P_W_70005
+
 
   flood-stnos:
-    - WG_F_CAM_00056
-    - WG_F_CAM_00057
-    - WG_F_CAM_00058
-    - WG_F_CAM_00059
-    - WG_F_CAM_00060
-    - WG_F_CAM_00061
-    - WG_F_CAM_00062
-    - WG_F_CAM_00063
-    - WG_F_CAM_00064
-    - WG_F_CAM_00065
-    - WG_F_CAM_00066
-    - WG_F_CAM_00067
-    - WG_F_CAM_00068
-    - WG_F_CAM_00069
-    - WG_F_CAM_00070
-    - WG_F_CAM_00071
-    - WG_F_CAM_00072
-    - WG_F_CAM_00073
+      - WG_F_CAM_00056
+      - WG_F_CAM_00057
+      - WG_F_CAM_00058
+      - WG_F_CAM_00059
+      - WG_F_CAM_00060
+      - WG_F_CAM_00061
+      - WG_F_CAM_00062
+      - WG_F_CAM_00063
+      - WG_F_CAM_00064
+      - WG_F_CAM_00065
+      - WG_F_CAM_00066
+      - WG_F_CAM_00067
+      - WG_F_CAM_00068
+      - WG_F_CAM_00069
+      - WG_F_CAM_00070
+      - WG_F_CAM_00071
+      - WG_F_CAM_00072
+      - WG_F_CAM_00073
+
+
+
 
 
