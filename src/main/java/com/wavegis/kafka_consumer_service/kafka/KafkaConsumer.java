@@ -77,7 +77,7 @@ public class KafkaConsumer {
 
         ack.acknowledge();
     }
-
+//南投資料丟逢甲
     @KafkaListener(id = "kafka_consumer_service_java-ntouToFengChia-0", topics = "sensordata", groupId = "kafka_consumer_service_java-ntouToFengChia")
     public void listenWavegisSensorNtouToFengChia(String kafkaMessage, Acknowledgment ack) {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");

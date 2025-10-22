@@ -7,10 +7,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StationStatusPostVO {
     @JsonProperty(value = "stationCodeName")
@@ -27,5 +29,28 @@ public class StationStatusPostVO {
 
     @JsonProperty(value = "waterGaugeArray")
     private List<WaterGaugePostVO> waterGaugeArray;
+
+    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed) {
+        this.stationCodeName = stationCodeName;
+        this.stationTime = stationTime;
+        this.isNetworkFailed = isNetworkFailed;
+
+    }
+
+    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed,
+            RainGaugeVO rainGauge) {
+        this.stationCodeName = stationCodeName;
+        this.stationTime = stationTime;
+        this.isNetworkFailed = isNetworkFailed;
+        this.rainGauge = rainGauge;
+    }
+
+    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed,
+            List<WaterGaugePostVO> waterGaugeArray) {
+        this.stationCodeName = stationCodeName;
+        this.stationTime = stationTime;
+        this.isNetworkFailed = isNetworkFailed;
+        this.waterGaugeArray = waterGaugeArray;
+    }
 
 }

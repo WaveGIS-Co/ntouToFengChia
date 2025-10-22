@@ -20,6 +20,7 @@ public class FilterService {
 
     private List<String> floodStnos;
 
+
     public boolean isFloodStation(String stno) {
         return floodStnos != null && floodStnos.contains(stno);
     }

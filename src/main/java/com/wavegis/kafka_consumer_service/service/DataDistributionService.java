@@ -1,5 +1,7 @@
 package com.wavegis.kafka_consumer_service.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wavegis.kafka_consumer_service.config.NtouConfig;
 import com.wavegis.kafka_consumer_service.kafka.KafkaDTO;
 import com.wavegis.kafka_consumer_service.kafka.KafkaRainDTO;
 import com.wavegis.kafka_consumer_service.model.dto.FloodValueAllDTO;
@@ -27,7 +30,10 @@ import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherSewerPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.NtouPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.RainGaugeVO;
+import com.wavegis.kafka_consumer_service.model.vo.StationStatusPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.TpeSewerPublisherPostVO;
+import com.wavegis.kafka_consumer_service.model.vo.WaterGaugePostVO;
 import com.wavegis.kafka_consumer_service.util.Util;
 
 @Service
@@ -70,7 +76,13 @@ public class DataDistributionService {
     private FilterService filterService;
 
     @Autowired
+    private NtouFilterService ntouFilterService;
+
+    @Autowired
     private ChanghuaWatercenterService changhuaWatercenterService;
+
+    @Autowired
+    private NtouConfig ntouConfig;
 
     private final String floodStNos = "00109flood019033,00109flood019038,00109flood019021,00109flood019036,00109flood019006,00109flood019017,00109flood019022"
             + ",00109flood019005,00109flood019012,00109flood019011,00109flood019027,00109flood019043,0000000011110050"
@@ -146,15 +158,39 @@ public class DataDistributionService {
                 }
                 break;
             }
-              case ntouToFengChia             : {
-                if (ntouDevicesDtoMap.containsKey(st_no)) {
-                    KafkaDTO dto = prepareDto.apply(kafka_message);
-                    int resCode = ntouPublisherApiService.postData(st_no,
-                            Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
-                    // int resCode = 200;
-                    logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
-                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
+            case ntouToFengChia: {
+                // if(!"64".equals(org_id)){
+                // logger.warn("不是南投的資料喔!orgId={}",org_id);
+                // break;
+                // }
+                if (!ntouFilterService.isNtouFloodStation(st_no) && !ntouFilterService.isNtouRainStation(kafka_message)
+                        && !ntouFilterService.isNtouWaterStation(st_no)) {
+                    logger.warn("[FILTER] stno={}", st_no);
+                    break;
                 }
+                //組VO
+                KafkaDTO dto = prepareDto.apply(kafka_message);
+                String stationCodeName = ntouConfig.getNtouFloodStnoMap().get(st_no);
+                LocalDateTime stationTime = LocalDateTime.parse(dto.getDatatime());
+                boolean isNetworkFailed = false;
+
+                StationStatusPostVO vo = new StationStatusPostVO(stationCodeName,stationTime,isNetworkFailed);
+                if (ntouFilterService.isNtouFloodStation(st_no) || ntouFilterService.isNtouWaterStation(st_no)) {
+                    List<WaterGaugePostVO> waterGaugeArray = new ArrayList<>();
+                    WaterGaugePostVO waterGaugePostVO = new WaterGaugePostVO(st_no, dto.getWaterInner());
+                    waterGaugeArray.add(waterGaugePostVO);
+                    vo.setWaterGaugeArray(waterGaugeArray);
+
+                } else if (ntouFilterService.isNtouRainStation(st_no)) {
+                    RainGaugeVO rainGaugeVO = new RainGaugeVO(st_no, dto.getRain());
+                    vo.setRainGauge(rainGaugeVO);
+                }
+
+                int resCode = ntouPublisherApiService.postData(st_no,
+                        Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+                // int resCode = 200;
+                logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
+                        topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
                 break;
             }
             case tpeSewer: {
@@ -197,8 +233,8 @@ public class DataDistributionService {
             }
             case changhuaFloodWater: {
                 if (!"109".equals(org_id)) {
-                logger.error("這不是彰化縣的資料!orgId={}", org_id);
-                break;
+                    logger.error("這不是彰化縣的資料!orgId={}", org_id);
+                    break;
                 }
                 // yaml過濾資料
                 if (filterService.isFloodStation(st_no) || filterService.isWaterStation(st_no)) {
