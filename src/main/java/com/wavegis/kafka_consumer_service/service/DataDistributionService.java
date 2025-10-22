@@ -126,10 +126,6 @@ public class DataDistributionService {
                 org_id);
         switch (publisherEnum) {
             case iow: {
-                if ("test".equals(org_id)) {
-                    logger.info("IOW被觸發了!");
-                    break;
-                }
                 if (iowSensorDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = iowPublisherApiService.postData(st_no,
@@ -140,6 +136,17 @@ public class DataDistributionService {
                 break;
             }
             case ntou: {
+                if (ntouDevicesDtoMap.containsKey(st_no)) {
+                    KafkaDTO dto = prepareDto.apply(kafka_message);
+                    int resCode = ntouPublisherApiService.postData(st_no,
+                            Collections.singletonList(Util.toVo(dto, new NtouPublisherPostVO())));
+                    // int resCode = 200;
+                    logger.info("Ntou---topics={}, resCode={}, st_no={}, datatime={}, water_inner_bed={}, rain={}",
+                            topices, resCode, st_no, dto.getDatatime(), dto.getWaterInnerBed(), dto.getRain());
+                }
+                break;
+            }
+              case ntouToFengChia             : {
                 if (ntouDevicesDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = ntouPublisherApiService.postData(st_no,
@@ -178,10 +185,6 @@ public class DataDistributionService {
                 break;
             }
             case changhuaSewer: {
-                if ("test".equals(org_id)) {
-                    logger.info("changhuaSewer被觸發了!");
-                    break;
-                }
                 if (floodStNos.indexOf(st_no) >= 0 || waterStNos.indexOf(st_no) >= 0) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
                     int resCode = changhuaService

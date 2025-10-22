@@ -18,6 +18,7 @@ public class KafkaConsumer {
     @Autowired
     private DataDistributionService dataDistributionService;
 
+       // filterDatas就是測試方便，需要測哪一個的時候把那個listener的filterDatas註解 然後測試資料org_id設為test
     private boolean filterDatas(String org_id, String st_no) {
 
         if (org_id == null || "test".equals(org_id)) {
@@ -38,7 +39,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         // this.filterDatas(orgId, stNo);沒用的東西
@@ -52,7 +53,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         dataDistributionService.distribution("sensordata_post", PublisherEnum.iow, orgId, stNo, kafkaMessage);
@@ -66,7 +67,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         dataDistributionService.distribution("sensordata", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
@@ -77,12 +78,24 @@ public class KafkaConsumer {
         ack.acknowledge();
     }
 
+    @KafkaListener(id = "kafka_consumer_service_java-ntouToFengChia-0", topics = "sensordata", groupId = "kafka_consumer_service_java-ntouToFengChia")
+    public void listenWavegisSensorNtouToFengChia(String kafkaMessage, Acknowledgment ack) {
+        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+        String orgId = kafkaMessage.split(",")[1];
+        if (!filterDatas(orgId, stNo)) {
+            return;
+        }
+        System.out.println("接收到kafka-message:" + kafkaMessage);
+        dataDistributionService.distribution("sensordata", PublisherEnum.ntouToFengChia, orgId, stNo, kafkaMessage);
+        ack.acknowledge();
+    }
+
     @KafkaListener(id = "kafka_consumer_service_java-ntou-1", topics = "sensordata_post", groupId = "kafka_consumer_service_java-ntou")
     public void listenOtherSensorNtou(String kafkaMessage, Acknowledgment ack) {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-       if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         dataDistributionService.distribution("sensordata_post", PublisherEnum.ntou, orgId, stNo, kafkaMessage);
@@ -97,7 +110,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-       if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         dataDistributionService.distribution("sensordata", PublisherEnum.tpeSewer, orgId, stNo, kafkaMessage);
@@ -112,7 +125,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0];
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
         dataDistributionService.distribution("sensordata", PublisherEnum.kaohsiungWrb, orgId, stNo, kafkaMessage);
@@ -126,7 +139,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
 
@@ -142,7 +155,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
 
@@ -160,7 +173,7 @@ public class KafkaConsumer {
 
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
 
@@ -173,15 +186,13 @@ public class KafkaConsumer {
     public void listenWavegisSensorChanghuaFloodWater(String kafkaMessage, Acknowledgment ack) {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if(!filterDatas(orgId, stNo)){
+        if (!filterDatas(orgId, stNo)) {
             return;
         }
-       System.out.println("接收到kafka-message:"+kafkaMessage);
+        System.out.println("接收到kafka-message:" + kafkaMessage);
         dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFloodWater, orgId, stNo, kafkaMessage);
         ack.acknowledge();
-        //filterDatas就是測試方便，需要測哪一個的時候把那個listener的filterDatas註解 然後測試資料org_id設為test
+
     }
-
-
 
 }
