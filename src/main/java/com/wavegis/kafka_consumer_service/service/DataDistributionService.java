@@ -142,9 +142,7 @@ public class DataDistributionService {
 
     public void distribution(String topices, PublisherEnum publisherEnum, String org_id, String st_no,
             String kafka_message) {
-        logger.info("[DEBUG] distribution called with publisherEnum={}, st_no={}, org_id={}", publisherEnum, st_no,
-                org_id);
-        switch (publisherEnum) {
+              switch (publisherEnum) {
             case iow: {
                 if (iowSensorDtoMap.containsKey(st_no)) {
                     KafkaDTO dto = prepareDto.apply(kafka_message);
@@ -167,10 +165,7 @@ public class DataDistributionService {
                 break;
             }
             case ntouToFengChia: {
-                // if(!"64".equals(org_id)){
-                // logger.warn("不是南投的資料喔!orgId={}",org_id);
-                // break;
-                // }
+
                 // 組VO
                 KafkaDTO dto = prepareDto.apply(kafka_message);
                 String stationCodeName = ntouConfig.getFloodStnos().containsKey(st_no)
@@ -179,7 +174,6 @@ public class DataDistributionService {
                                 : ntouConfig.getRainStnos().getOrDefault(st_no, null);
 
                 if (stationCodeName == null) {
-                    logger.warn("[FILTER] st_no={} 無法在任何站別找到對應 stationCodeName，略過處理", st_no);
                     break;
                 }
                 // 時間格式轉換
@@ -253,7 +247,6 @@ public class DataDistributionService {
             }
             case changhuaFloodWater: {
                 if (!"109".equals(org_id)) {
-                    logger.error("這不是彰化縣的資料!orgId={}", org_id);
                     break;
                 }
                 // yaml過濾資料
@@ -262,10 +255,9 @@ public class DataDistributionService {
                     ChuploadPostVO vo = new ChuploadPostVO();
                     vo = vo.toChuploadPostVO(dto);
 
-                    // int resCode = changhuaWatercenterService
-                    // .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
-                    int resCode = 200;
-                    logger.info(JsonConverter.convert(vo));
+                    int resCode = changhuaWatercenterService
+                    .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
+                    logger.info("changhuaFloodWater---topics={}, resCode={}",topices,resCode,JsonConverter.convert(vo));
                 }
                 break;
             }

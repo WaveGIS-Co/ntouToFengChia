@@ -82,9 +82,9 @@ public class KafkaConsumer {
     public void listenWavegisSensorNtouToFengChia(String kafkaMessage, Acknowledgment ack) {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        // if (!filterDatas(orgId, stNo)) {
-        //     return;
-        // }
+        if (!filterDatas(orgId, stNo)) {
+            return;
+        }
 
         dataDistributionService.distribution("sensordata", PublisherEnum.ntouToFengChia, orgId, stNo, kafkaMessage);
         ack.acknowledge();

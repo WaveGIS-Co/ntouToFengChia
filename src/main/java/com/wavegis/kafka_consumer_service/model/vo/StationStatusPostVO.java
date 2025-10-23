@@ -23,10 +23,8 @@ public class StationStatusPostVO {
     @JsonProperty(value = "stationTime")
     private Instant stationTime;
 
-
     @JsonProperty("isNetworkFailed")
     private boolean networkFailed;
-
 
     @JsonProperty(value = "rainGauge")
     private RainGaugeVO rainGauge;
@@ -40,7 +38,5 @@ public class StationStatusPostVO {
         this.networkFailed = networkFailed;
 
     }
-
-
 
 }
