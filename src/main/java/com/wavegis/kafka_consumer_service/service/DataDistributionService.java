@@ -1,6 +1,9 @@
 package com.wavegis.kafka_consumer_service.service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -168,17 +171,23 @@ public class DataDistributionService {
                 // logger.warn("不是南投的資料喔!orgId={}",org_id);
                 // break;
                 // }
+                // 組VO
                 KafkaDTO dto = prepareDto.apply(kafka_message);
-                String stationCodeName =
-        ntouConfig.getFloodStnos().containsKey(st_no) ? ntouConfig.getFloodStnos().get(st_no) :
-        ntouConfig.getWaterStnos().containsKey(st_no) ? ntouConfig.getWaterStnos().get(st_no) :
-        ntouConfig.getRainStnos().getOrDefault(st_no, null);
+                String stationCodeName = ntouConfig.getFloodStnos().containsKey(st_no)
+                        ? ntouConfig.getFloodStnos().get(st_no)
+                        : ntouConfig.getWaterStnos().containsKey(st_no) ? ntouConfig.getWaterStnos().get(st_no)
+                                : ntouConfig.getRainStnos().getOrDefault(st_no, null);
 
-         if (stationCodeName == null) {
-        logger.warn("[FILTER] st_no={} 無法在任何站別找到對應 stationCodeName，略過處理", st_no);
-        break;
-    }
-                LocalDateTime stationTime = LocalDateTime.parse(dto.getDatatime(),formatter);
+                if (stationCodeName == null) {
+                    logger.warn("[FILTER] st_no={} 無法在任何站別找到對應 stationCodeName，略過處理", st_no);
+                    break;
+                }
+                // 時間格式轉換
+                String timeStr = dto.getDatatime();
+                LocalDateTime localDateTime = LocalDateTime.parse(timeStr, formatter);
+                ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Taipei"));
+                Instant stationTime = zonedDateTime.toInstant();
+
                 boolean isNetworkFailed = false;
 
                 StationStatusPostVO vo = new StationStatusPostVO(stationCodeName, stationTime, isNetworkFailed);
@@ -198,7 +207,6 @@ public class DataDistributionService {
                     logger.warn("[FILTER] 未分類站點 st_no={}，略過處理", st_no);
                     break;
                 }
-                // 組VO
                 int resCode = 200;
                 // int resCode = ntouToFengChiaService.postData(vo);
                 logger.info(JsonConverter.convert(vo));
@@ -256,7 +264,7 @@ public class DataDistributionService {
                     // int resCode = changhuaWatercenterService
                     // .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
                     int resCode = 200;
-                   logger.info(JsonConverter.convert(vo));
+                    logger.info(JsonConverter.convert(vo));
                 }
                 break;
             }

@@ -1,5 +1,6 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class StationStatusPostVO {
     private String stationCodeName;// 測站代號
 
     @JsonProperty(value = "stationTime")
-    private LocalDateTime stationTime;
+    private Instant stationTime;
 
     @JsonProperty(value = "isNetworkFailed")
     private boolean isNetworkFailed;
@@ -32,14 +33,14 @@ public class StationStatusPostVO {
     @JsonProperty(value = "waterGaugeArray")
     private List<WaterGaugePostVO> waterGaugeArray;
 
-    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed) {
+    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed) {
         this.stationCodeName = stationCodeName;
         this.stationTime = stationTime;
         this.isNetworkFailed = isNetworkFailed;
 
     }
 
-    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed,
+    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed,
             RainGaugeVO rainGauge) {
         this.stationCodeName = stationCodeName;
         this.stationTime = stationTime;
@@ -47,7 +48,7 @@ public class StationStatusPostVO {
         this.rainGauge = rainGauge;
     }
 
-    public StationStatusPostVO(String stationCodeName, LocalDateTime stationTime, boolean isNetworkFailed,
+    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed,
             List<WaterGaugePostVO> waterGaugeArray) {
         this.stationCodeName = stationCodeName;
         this.stationTime = stationTime;
