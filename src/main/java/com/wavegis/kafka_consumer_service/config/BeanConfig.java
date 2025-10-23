@@ -72,7 +72,7 @@ public class BeanConfig {
 
     @Bean
     public INtouToFengChiaService iNtouToFengChiaService() {
-        return RetrofitFactory.createService(INtouToFengChiaService.class,serviceConfig.getApiChanghuaUploaderBaseUrl());
+        return RetrofitFactory.createService(INtouToFengChiaService.class,serviceConfig.getApiNtToFengChiaBaseUrl());
     }
 
     @Bean
