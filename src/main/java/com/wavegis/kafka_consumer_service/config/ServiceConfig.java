@@ -35,6 +35,8 @@ public class ServiceConfig {
 
     private String apiChanghuaUploaderBaseUrl;
 
+    private String apiNtToFengChiaBaseUrl;
+
     public String getApiIowBaseUrl() {
         return apiIowBaseUrl;
     }
@@ -146,5 +148,15 @@ public class ServiceConfig {
     public void setApiChanghuaUploaderBaseUrl(String apiChanghuaUploaderBaseUrl) {
         this.apiChanghuaUploaderBaseUrl = apiChanghuaUploaderBaseUrl;
     }
+
+    public String getApiNtToFengChiaBaseUrl() {
+        return apiNtToFengChiaBaseUrl;
+    }
+
+    public void setApiNtToFengChiaBaseUrl(String apiNtToFengChiaBaseUrl) {
+        this.apiNtToFengChiaBaseUrl = apiNtToFengChiaBaseUrl;
+    }
+
+
 
 }

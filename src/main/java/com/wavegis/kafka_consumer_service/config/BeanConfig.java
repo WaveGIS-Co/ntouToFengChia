@@ -12,10 +12,10 @@ import com.wavegis.kafka_consumer_service.api.IKaohsiungWrbService;
 import com.wavegis.kafka_consumer_service.api.INewTaipeiService;
 import com.wavegis.kafka_consumer_service.api.INewTaipeiSewerService;
 import com.wavegis.kafka_consumer_service.api.INtouPublisherService;
+import com.wavegis.kafka_consumer_service.api.INtouToFengChiaService;
 import com.wavegis.kafka_consumer_service.api.IPostgresApiService;
 import com.wavegis.kafka_consumer_service.api.ITpeSewerPublisherService;
 import com.wavegis.kafka_consumer_service.util.RetrofitFactory;
-
 
 @Configuration
 public class BeanConfig {
@@ -50,12 +50,14 @@ public class BeanConfig {
 
     @Bean
     public IChanghuaSewerageDepartmentApiService iChanghuaSewerageDepartmentApiService() {
-        return RetrofitFactory.createService(IChanghuaSewerageDepartmentApiService.class, serviceConfig.getApiChanghuaVmUrl());
+        return RetrofitFactory.createService(IChanghuaSewerageDepartmentApiService.class,
+                serviceConfig.getApiChanghuaVmUrl());
     }
 
     @Bean
     public IChanghuaUploaderService iChanghuaUploaderService() {
-        return RetrofitFactory.createService(IChanghuaUploaderService.class, serviceConfig.getApiChanghuaUploaderBaseUrl());
+        return RetrofitFactory.createService(IChanghuaUploaderService.class,
+                serviceConfig.getApiChanghuaUploaderBaseUrl());
     }
 
     @Bean
@@ -68,13 +70,18 @@ public class BeanConfig {
         return RetrofitFactory.createService(INewTaipeiSewerService.class, serviceConfig.getApiNtpcSewerBaseUrl());
     }
 
-	@Bean
-	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-		threadPoolTaskScheduler.setAwaitTerminationSeconds(60);
-		threadPoolTaskScheduler.setPoolSize(5);
-		threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(true);
-		return threadPoolTaskScheduler;
-	}
+    @Bean
+    public INtouToFengChiaService iNtouToFengChiaService() {
+        return RetrofitFactory.createService(INtouToFengChiaService.class,serviceConfig.getApiChanghuaUploaderBaseUrl());
+    }
+
+    @Bean
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setAwaitTerminationSeconds(60);
+        threadPoolTaskScheduler.setPoolSize(5);
+        threadPoolTaskScheduler.setWaitForTasksToCompleteOnShutdown(true);
+        return threadPoolTaskScheduler;
+    }
 
 }
