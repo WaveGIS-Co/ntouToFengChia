@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface INtouToFengChiaService {
 
-    @POST(value = "station/update")
+    @POST(value = "stations/update")
     Call<Void> postData(
             @Body StationStatusPostVO stationStatusPostVO);
 }

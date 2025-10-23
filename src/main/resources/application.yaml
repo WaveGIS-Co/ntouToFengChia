@@ -42,7 +42,7 @@ wavegis:
     api-ntpc-base-url: 'https://www.wrsntpc.ntpc.gov.tw/api/wavegis_base/water/'
     api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
     api-changhua-uploader-base-url: 'http://59.124.12.195:5200/uploader/'
-    api-nt-to-feng-chia-base-url:''
+    api-nt-to-feng-chia-base-url: 'http://ntapi.monitorsystem.com.tw/'
 
 filter:
   water-stnos:
@@ -102,7 +102,7 @@ filter:
       - WG_F_CAM_00072
       - WG_F_CAM_00073
 
-ntoufilter:
+ntouconfig:
   water-stnos:
       W10JA01: W10JA01
       WG_RR_W_00210: NTWAVE001
@@ -110,6 +110,8 @@ ntoufilter:
       WG_RR_W_00212: NTWAVE003
       WG_RR_W_00213: NTWAVE004
       WG_RR_W_00214: NTWAVE004
+
+
   rain-stnos:
       W10JA01: W10JA01
       WG_RN_00003: NTWAVE001
@@ -117,9 +119,13 @@ ntoufilter:
       WG_RN_00005: NTWAVE003
       WG_RN_00006: NTWAVE004
       WG_RN_00007: NTWAVE005
+
   flood-stnos:
       W10JA01: W10JA01
       WG_F_00319: NTWAVE006
+
+
+
 
 
 

@@ -82,10 +82,10 @@ public class KafkaConsumer {
     public void listenWavegisSensorNtouToFengChia(String kafkaMessage, Acknowledgment ack) {
         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
         String orgId = kafkaMessage.split(",")[1];
-        if (!filterDatas(orgId, stNo)) {
-            return;
-        }
-        System.out.println("接收到kafka-message:" + kafkaMessage);
+        // if (!filterDatas(orgId, stNo)) {
+        //     return;
+        // }
+
         dataDistributionService.distribution("sensordata", PublisherEnum.ntouToFengChia, orgId, stNo, kafkaMessage);
         ack.acknowledge();
     }
@@ -189,7 +189,6 @@ public class KafkaConsumer {
         if (!filterDatas(orgId, stNo)) {
             return;
         }
-        System.out.println("接收到kafka-message:" + kafkaMessage);
         dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFloodWater, orgId, stNo, kafkaMessage);
         ack.acknowledge();
 

@@ -13,11 +13,11 @@ public class NtouToFengChiaService {
 
 private INtouToFengChiaService iNtouToFengChiaService;
 
-public int uploadData(StationStatusPostVO vo){
-    return this.uploadDataNtouSensor(vo);
+public int postData(StationStatusPostVO vo){
+    return this.postDataNtouSensor(vo);
 }
 
-private int uploadDataNtouSensor(StationStatusPostVO vo){
+private int postDataNtouSensor(StationStatusPostVO vo){
      Call<Void> call = iNtouToFengChiaService.postData(vo);
     int responseCode = Util.callApiResponseCode(call, "postData");
         return responseCode;
