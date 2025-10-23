@@ -1,7 +1,6 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,8 +23,10 @@ public class StationStatusPostVO {
     @JsonProperty(value = "stationTime")
     private Instant stationTime;
 
-    @JsonProperty(value = "isNetworkFailed")
-    private boolean isNetworkFailed;
+
+    @JsonProperty("isNetworkFailed")
+    private boolean networkFailed;
+
 
     @JsonProperty(value = "rainGauge")
     private RainGaugeVO rainGauge;
@@ -33,27 +34,13 @@ public class StationStatusPostVO {
     @JsonProperty(value = "waterGaugeArray")
     private List<WaterGaugePostVO> waterGaugeArray;
 
-    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed) {
+    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean networkFailed) {
         this.stationCodeName = stationCodeName;
         this.stationTime = stationTime;
-        this.isNetworkFailed = isNetworkFailed;
+        this.networkFailed = networkFailed;
 
     }
 
-    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed,
-            RainGaugeVO rainGauge) {
-        this.stationCodeName = stationCodeName;
-        this.stationTime = stationTime;
-        this.isNetworkFailed = isNetworkFailed;
-        this.rainGauge = rainGauge;
-    }
 
-    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean isNetworkFailed,
-            List<WaterGaugePostVO> waterGaugeArray) {
-        this.stationCodeName = stationCodeName;
-        this.stationTime = stationTime;
-        this.isNetworkFailed = isNetworkFailed;
-        this.waterGaugeArray = waterGaugeArray;
-    }
 
 }
