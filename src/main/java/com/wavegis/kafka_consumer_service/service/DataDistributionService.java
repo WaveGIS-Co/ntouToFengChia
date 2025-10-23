@@ -204,7 +204,8 @@ public class DataDistributionService {
                     RainGaugeVO rainGauge = new RainGaugeVO(st_no, dto.getRain());
                     vo.setRainGauge(rainGauge);
                 } else {
-                    logger.warn("[FILTER] 未分類站點 st_no={}，略過處理", st_no);
+                    logger.error("[FILTER] 此站不在南投丟逢甲的sensor名單中 st_no={}，略過處理", st_no);
+
                     break;
                 }
                 int resCode = 200;
