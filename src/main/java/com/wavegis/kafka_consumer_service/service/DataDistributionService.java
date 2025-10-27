@@ -202,9 +202,8 @@ public class DataDistributionService {
 
                     break;
                 }
-                // int resCode = 200;
-                // int resCode = ntouToFengChiaService.postData(vo);
-                // logger.info(JsonConverter.convert(vo));
+                int resCode = ntouToFengChiaService.postData(vo);
+                logger.info("resCode={}",resCode,JsonConverter.convert(vo));
                 break;
             }
             case tpeSewer: {
