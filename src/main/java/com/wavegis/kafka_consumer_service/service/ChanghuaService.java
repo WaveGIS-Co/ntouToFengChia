@@ -16,14 +16,15 @@ public class ChanghuaService {
 
     @Autowired
     private IChanghuaSewerageDepartmentApiService iChanghuaSewerageDepartmentApiService;
-    
+
     public int postData(List<ChsewerPostVO> voList) {
         return this.postDataChanghuaSensorList(voList);
     }
-    
+
     private int postDataChanghuaSensorList(List<ChsewerPostVO> voList) {
         Call<Void> call = iChanghuaSewerageDepartmentApiService.postData(voList);
         int responseCode = Util.callApiResponseCode(call, "postData");
         return responseCode;
     }
+
 }

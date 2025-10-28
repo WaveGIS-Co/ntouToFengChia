@@ -24,7 +24,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: false
-      
+
 server:
   port: 8777
 
@@ -41,4 +41,95 @@ wavegis:
     api-changhua-vm-url: 'https://changhuafloodsmartweb.chcg.gov.tw/'
     api-ntpc-base-url: 'https://www.wrsntpc.ntpc.gov.tw/api/wavegis_base/water/'
     api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
+    api-changhua-uploader-base-url: 'http://59.124.12.195:5200/uploader/'
+    api-nt-to-feng-chia-base-url: 'http://ntapi.monitorsystem.com.tw/'
+
+filter:
+  water-stnos:
+      - WG_RR_W_00096
+      - WG_RR_W_00097
+      - WG_RR_W_001000
+      - WG_RR_W_00101
+      - WG_RR_W_00102
+      - WG_RR_W_00103
+      - WG_RR_W_00104
+      - WG_RR_W_00105
+      - WG_RR_W_00106
+      - WG_RR_W_00107
+      - WG_RR_W_00108
+      - WG_RR_W_00109
+      - WG_RR_W_00110
+      - WG_RR_W_00111
+      - WG_RR_W_00112
+      - WG_RR_W_00113
+      - WG_RR_W_00114
+      - WG_RR_W_00115
+      - WG_RR_W_00116
+      - WG_RR_W_00117
+      - WG_SRR_WS_00004
+      - WG_SRR_WS_00006
+      - WG_RR_W_00089
+      - WG_RR_W_00090
+      - WG_P_W_70003
+      - WG_P_W_70004
+      - WG_P_W_70002
+      - WG_P_W_70001
+      - WG_SRR_WS_00007
+      - WG_SRR_WS_00008
+      - WG_SRR_WS_00009
+      - WG_SRR_WS_00003
+      - WG_SRR_WS_00005
+      - WG_P_W_70005
+
+
+  flood-stnos:
+      - WG_F_CAM_00056
+      - WG_F_CAM_00057
+      - WG_F_CAM_00058
+      - WG_F_CAM_00059
+      - WG_F_CAM_00060
+      - WG_F_CAM_00061
+      - WG_F_CAM_00062
+      - WG_F_CAM_00063
+      - WG_F_CAM_00064
+      - WG_F_CAM_00065
+      - WG_F_CAM_00066
+      - WG_F_CAM_00067
+      - WG_F_CAM_00068
+      - WG_F_CAM_00069
+      - WG_F_CAM_00070
+      - WG_F_CAM_00071
+      - WG_F_CAM_00072
+      - WG_F_CAM_00073
+
+ntouconfig:
+  water-stnos:
+      W10JA01: W10JA01
+      WG_RR_W_00210: NTWAVE001
+      WG_RR_W_00211: NTWAVE002
+      WG_RR_W_00212: NTWAVE003
+      WG_RR_W_00213: NTWAVE004
+      WG_RR_W_00214: NTWAVE004
+
+
+  rain-stnos:
+      W10JA01: W10JA01
+      WG_RN_00003: NTWAVE001
+      WG_RN_00004: NTWAVE002
+      WG_RN_00005: NTWAVE003
+      WG_RN_00006: NTWAVE004
+      WG_RN_00007: NTWAVE005
+
+  flood-stnos:
+      W10JA01: W10JA01
+      WG_F_00319: NTWAVE006
+
+
+
+
+
+
+
+
+
 

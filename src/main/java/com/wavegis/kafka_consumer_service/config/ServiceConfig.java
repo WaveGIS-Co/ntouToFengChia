@@ -6,32 +6,36 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "wavegis.iow-publisher-upload-service")
 @Configuration
 public class ServiceConfig {
-	
+
 	private String apiIowBaseUrl;
-	
+
 	private String api8210BaseUrl;
-	
+
 	private String api8899BaseUrl;
-	
+
 	private String apiJavaBaseUrl;
-	
+
 	private String api187PostgresApiUrl;
-	
+
 	private String api187IowUrl;
-	
+
 	private String api187NtouUrl;
 
 	private String api187TpesewerUrl;
 
     private String apiKaohsiungWrbUrl;
-    
+
     private String apiChanghuaVmUrl;
-    
+
     private String apiNtpcBaseUrl;
-    
+
     private String apiNtpcSewerBaseUrl;
-	
+
 	private String scheduleTime;
+
+    private String apiChanghuaUploaderBaseUrl;
+
+    private String apiNtToFengChiaBaseUrl;
 
     public String getApiIowBaseUrl() {
         return apiIowBaseUrl;
@@ -136,5 +140,23 @@ public class ServiceConfig {
     public void setApiNtpcSewerBaseUrl(String apiNtpcSewerBaseUrl) {
         this.apiNtpcSewerBaseUrl = apiNtpcSewerBaseUrl;
     }
- 
+
+    public String getApiChanghuaUploaderBaseUrl() {
+        return apiChanghuaUploaderBaseUrl;
+    }
+
+    public void setApiChanghuaUploaderBaseUrl(String apiChanghuaUploaderBaseUrl) {
+        this.apiChanghuaUploaderBaseUrl = apiChanghuaUploaderBaseUrl;
+    }
+
+    public String getApiNtToFengChiaBaseUrl() {
+        return apiNtToFengChiaBaseUrl;
+    }
+
+    public void setApiNtToFengChiaBaseUrl(String apiNtToFengChiaBaseUrl) {
+        this.apiNtToFengChiaBaseUrl = apiNtToFengChiaBaseUrl;
+    }
+
+
+
 }
