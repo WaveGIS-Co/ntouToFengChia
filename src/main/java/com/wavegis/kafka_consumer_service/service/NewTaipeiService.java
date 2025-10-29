@@ -72,6 +72,7 @@ public class NewTaipeiService {
         return responseCode;
     }
     
+  //上傳water_inner還原成修正水位
     private int postFloodValue_All_Re(List<FloodValueAllDTO> dtos) {
         Call<ResponseBody> call = iNewTaipeiService.postFloodValueAllRe(dtos);
         int responseCode = Util.callApiResponseCode(call, "postFloodValue_All_Re");

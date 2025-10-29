@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -27,6 +31,11 @@ public class Util {
 	
 	public static LocalDateTime localDateTime;
 	
+	private static final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+	
+	// 限制同時執行任務數量
+	private final static Semaphore semaphore = new Semaphore(100);
+	 
     public static LocalDateTime stringToLocalDateTime(String str) {
         localDateTime = LocalDateTime.parse(str, formatter);
         return localDateTime;
@@ -208,11 +217,13 @@ public class Util {
                 return code;
             }else {
                 logger.error("api return http code = {}, url = {}, message = {}", code, call.request().url().toString(), res.errorBody().string());
-                return reTryApiResponseCode(res, call, method);
+                reTryApiResponseCodeAsync(call, method);
+                return 204;
             }
         } catch (IOException ioe) {
             logger.error("api throw IOException url={}",call.request().url().toString());
-            return reTryApiResponseCode(res, call, method);
+            reTryApiResponseCodeAsync(call, method);
+            return 204;
         } catch (Exception ex) {
             logger.error("api throw Exception url={},exception is",call.request().url().toString(),ex);
             call.cancel();
@@ -221,30 +232,92 @@ public class Util {
     }
     
     public static <T> int reTryApiResponseCode(Response<T> res, Call<T> call, String method) {
-        int time = 1;
-        int code = 204;
-        while(time <= 10) {
-            try {
-                Thread.sleep(1000*5);
-                res = call.clone().execute();
-                code = res.code();
-                if (code == 200) {
-                    logger.info("time={},code={}",time, code);
-                    call.clone().cancel();
-                    return code;
-                }else {
-                    logger.error("time={},api return http code = {}, url = {}, message = {}",time, code, call.request().url().toString(), res.errorBody().string());
-                }
-            } catch (IOException ioe) {
-                logger.error("time={},api throw IOException url={}",time, call.request().url().toString());
-            } catch (Exception ex) {
-                logger.error("time={},api throw Exception url={},exception is",time, call.request().url().toString(),ex);
-                call.clone().cancel();
-                return 501;
-            }
-            time++;
-            call.clone().cancel();
-        }
+    	int code = 204;
+    	// 取得 semaphore，限制同時提交的任務數量
+        try {
+			semaphore.acquire();
+			executor.submit(() -> {
+				int time = 1;
+				int codeRe = 0;
+				while(time <= 10) {
+					try {
+						Thread.sleep(1000*5);
+						Response<T> resRe = call.clone().execute();
+						codeRe = resRe.code();
+						if (codeRe == 200) {
+							logger.info("time={},code={}",time, codeRe);
+							call.clone().cancel();
+							return codeRe;
+						}else {
+							logger.error("time={},api return http code = {}, url = {}, message = {}",time, codeRe, call.request().url().toString(), res.errorBody().string());
+						}
+					} catch (IOException ioe) {
+						logger.error("time={},api throw IOException url={}",time, call.request().url().toString());
+					} catch (Exception ex) {
+						logger.error("time={},api throw Exception url={},exception is",time, call.request().url().toString(),ex);
+						call.clone().cancel();
+						return 501;
+					} finally {
+	                    // 任務結束後釋放 semaphore
+	                    semaphore.release();
+	                }
+					time++;
+					call.clone().cancel();
+				}
+				return codeRe;
+			});
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+            logger.error("Semaphore acquire interrupted", e);
+		}
         return code;
+    }
+    
+    public static <T> CompletableFuture<Integer> reTryApiResponseCodeAsync(
+            Call<T> call, String method) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                // acquire semaphore，限流
+                semaphore.acquire();
+
+                int time = 1;
+                int codeRe = 204;
+
+                while (time <= 10) {
+                    try {
+                        Thread.sleep(5000); // 每次重試等待 5 秒
+
+                        Response<T> resRe = call.clone().execute();
+                        codeRe = resRe.code();
+
+                        if (codeRe == 200) {
+                            logger.info("[{}] time={}, code={}", method, time, codeRe);
+                            return codeRe;
+                        } else {
+                            String errorMsg = resRe.errorBody() != null ? resRe.errorBody().string() : "no error body";
+                            logger.error("[{}] time={}, api return http code={}, url={}, message={}",
+                                    method, time, codeRe, call.request().url(), errorMsg);
+                        }
+
+                    } catch (IOException ioe) {
+                        logger.error("[{}] time={}, api throw IOException, url={}", method, time, call.request().url(), ioe);
+                    } catch (Exception ex) {
+                        logger.error("[{}] time={}, api throw Exception, url={}", method, time, call.request().url(), ex);
+                        return 501; // 其他例外返回 501
+                    }
+                    time++;
+                }
+
+                return codeRe;
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                logger.error("[{}] Semaphore acquire interrupted", method, e);
+                return 500; // semaphore 中斷返回 500
+            } finally {
+                semaphore.release();
+            }
+        }, executor);
     }
 }

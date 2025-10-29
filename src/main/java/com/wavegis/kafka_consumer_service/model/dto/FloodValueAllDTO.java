@@ -13,6 +13,9 @@ public class FloodValueAllDTO {
 	@JsonProperty("datatime")
 	private String datatime;
 	
+	@JsonProperty("sendtime")
+	private String sendtime;
+	
 	@JsonProperty("device_type")
 	private String deviceType;
 
@@ -46,7 +49,15 @@ public class FloodValueAllDTO {
 	@JsonProperty("version")
 	private String version;
 
-    public String getStNo() {
+    public String getSendtime() {
+		return sendtime;
+	}
+
+	public void setSendtime(String sendtime) {
+		this.sendtime = sendtime;
+	}
+
+	public String getStNo() {
         return stNo;
     }
 
