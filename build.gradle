@@ -29,10 +29,18 @@ dependencies {
     
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
     implementation 'io.swagger:swagger-models:1.5.21'
-    
+
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-jackson:2.7.1'
     implementation 'com.squareup.okhttp3:logging-interceptor'
-    
+
     implementation 'com.google.firebase:firebase-admin:6.9.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+//測試
+    testImplementation 'org.springframework.kafka:spring-kafka-test:2.3.12.RELEASE'
+
+
 }

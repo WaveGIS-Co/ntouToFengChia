@@ -24,7 +24,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: false
-      
+
 server:
   port: 8777
 springdoc:
@@ -47,4 +47,203 @@ wavegis:
     api-changhua-vm-url: 'https://changhuafloodsmartweb.chcg.gov.tw/'
     api-ntpc-base-url: 'https://www.wrsntpc.ntpc.gov.tw/api/wavegis_base/water/'
     api-ntpc-sewer-base-url: 'https://wrdsewer.ntpc.gov.tw/api/wavegis_base/water/'
+    api-changhua-uploader-base-url: 'http://59.124.12.195:5200/uploader/'
+    api-nt-to-feng-chia-base-url: 'http://ntapi.monitorsystem.com.tw/'
+
+# 彰化
+filter:
+  water-stnos:
+      - WG_RR_W_00096
+      - WG_RR_W_00097
+      - WG_RR_W_001000
+      - WG_RR_W_00101
+      - WG_RR_W_00102
+      - WG_RR_W_00103
+      - WG_RR_W_00104
+      - WG_RR_W_00105
+      - WG_RR_W_00106
+      - WG_RR_W_00107
+      - WG_RR_W_00108
+      - WG_RR_W_00109
+      - WG_RR_W_00110
+      - WG_RR_W_00111
+      - WG_RR_W_00112
+      - WG_RR_W_00113
+      - WG_RR_W_00114
+      - WG_RR_W_00115
+      - WG_RR_W_00116
+      - WG_RR_W_00117
+      - WG_SRR_WS_00004
+      - WG_SRR_WS_00006
+      - WG_RR_W_00089
+      - WG_RR_W_00090
+      - WG_P_W_70003
+      - WG_P_W_70004
+      - WG_P_W_70002
+      - WG_P_W_70001
+      - WG_SRR_WS_00007
+      - WG_SRR_WS_00008
+      - WG_SRR_WS_00009
+      - WG_SRR_WS_00003
+      - WG_SRR_WS_00005
+      - WG_P_W_70005
+      - 0000000011110010
+      - 0000000011110011
+      - 0000000011110024
+      - 0000000011110032
+      - 0000000011110034
+      - 0000000011110035
+      - 0000000011110046
+      - 00109water019002
+      - 00109water019003
+      - 00109water019004
+      - 00109water019005
+      - 00109water019006
+      - 00109water019007
+      - 00109water019008
+      - 00109water019009
+      - 00109water019010
+      - A34-TPQ1
+      - A36-WGQ1
+      - A37-KCPS
+      - A38-SYQ1
+      - A39-SGYH
+      - A40-HXQ1
+      - A41-GH000022
+      - A42-GH000020
+      - A43-GH000021
+      - WG_P_W_00392
+      - WG_RR_W_00061
+      - WG_RR_W_00062
+      - WG_RR_W_00063
+      - WG_RR_W_00064
+      - WG_RR_W_00065
+      - WG_RR_W_00066
+      - WG_RR_W_00067
+      - WG_RR_W_00068
+      - WG_RR_W_00069
+      - WG_RR_W_00070
+      - WG_RR_W_00071
+      - WG_RR_W_00072
+      - WG_RR_W_00073
+      - WG_RR_W_00074
+      - WG_RR_W_00075
+      - WG_RR_W_00076
+      - WG_RR_W_00078
+      - WG_RR_W_00079
+      - WG_RR_W_00080
+      - WG_RR_W_00081
+      - WG_RR_W_00082
+      - WG_RR_W_00083
+      - WG_RR_W_00084
+      - WG_RR_W_00085
+      - WG_RR_W_00086
+      - WG_RR_W_00087
+      - WG_RR_W_00094
+
+
+
+
+  flood-stnos:
+      - WG_F_CAM_00056
+      - WG_F_CAM_00057
+      - WG_F_CAM_00058
+      - WG_F_CAM_00059
+      - WG_F_CAM_00060
+      - WG_F_CAM_00061
+      - WG_F_CAM_00062
+      - WG_F_CAM_00063
+      - WG_F_CAM_00064
+      - WG_F_CAM_00065
+      - WG_F_CAM_00066
+      - WG_F_CAM_00067
+      - WG_F_CAM_00068
+      - WG_F_CAM_00069
+      - WG_F_CAM_00070
+      - WG_F_CAM_00071
+      - WG_F_CAM_00072
+      - WG_F_CAM_00073
+      - 0000000011110027
+      - 0000000011110036
+      - 0000000011110038
+      - 0000000011110040
+      - 0000000011110050
+      - 0000000011110051
+      - 00109flood019001
+      - 00109flood019002
+      - 00109flood019003
+      - 00109flood019004
+      - 00109flood019005
+      - 00109flood019006
+      - 00109flood019007
+      - 00109flood019008
+      - 00109flood019009
+      - 00109flood019010
+      - 00109flood019011
+      - 00109flood019012
+      - 00109flood019013
+      - 00109flood019014
+      - 00109flood019015
+      - 00109flood019016
+      - 00109flood019017
+      - 00109flood019018
+      - 00109flood019019
+      - 00109flood019020
+      - 00109flood019021
+      - 00109flood019022
+      - 00109flood019023
+      - 00109flood019024
+      - 00109flood019025
+      - 00109flood019026
+      - 00109flood019027
+      - 00109flood019028
+      - 00109flood019029
+      - 00109flood019030
+      - 00109flood019031
+      - 00109flood019032
+      - 00109flood019033
+      - 00109flood019034
+      - 00109flood019035
+      - 00109flood019036
+      - 00109flood019037
+      - 00109flood019038
+      - 00109flood019039
+      - 00109flood019040
+      - 00109flood019041
+      - 00109flood019042
+      - 00109flood019043
+      - 00109flood019044
+      - 00109flood019045
+
+
+ntouconfig:
+  water-stnos:
+      W10JA01: W10JA01
+      WG_RR_W_00210: NTWAVE001
+      WG_RR_W_00211: NTWAVE002
+      WG_RR_W_00212: NTWAVE003
+      WG_RR_W_00213: NTWAVE004
+      WG_RR_W_00214: NTWAVE004
+
+
+  rain-stnos:
+      W10JA01: W10JA01
+      WG_RN_00003: NTWAVE001
+      WG_RN_00004: NTWAVE002
+      WG_RN_00005: NTWAVE003
+      WG_RN_00006: NTWAVE004
+      WG_RN_00007: NTWAVE005
+
+  flood-stnos:
+      W10JA01: W10JA01
+      WG_F_00319: NTWAVE006
+
+
+
+
+
+
+
+
+
 
