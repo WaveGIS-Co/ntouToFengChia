@@ -23,6 +23,7 @@ public interface INewTaipeiSewerService {
     @POST(value = "flood/postFloodValue_All")
     Call<ResponseBody> postFloodValueAll(@Body List<FloodValueAllDTO> dtos);
     
+    //上傳water_inner還原成修正水位
     @POST(value = "flood/postFloodValue_All_Re")
     Call<ResponseBody> postFloodValueAllRe(@Body List<FloodValueAllDTO> dtos);
     
