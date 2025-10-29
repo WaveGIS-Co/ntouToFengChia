@@ -33,7 +33,7 @@ public class ServiceConfig {
 
 	private String scheduleTime;
 
-    private String apiChanghuaUploaderBaseUrl;
+    // private String apiChanghuaUploaderBaseUrl;
 
     private String apiNtToFengChiaBaseUrl;
 
@@ -141,13 +141,13 @@ public class ServiceConfig {
         this.apiNtpcSewerBaseUrl = apiNtpcSewerBaseUrl;
     }
 
-    public String getApiChanghuaUploaderBaseUrl() {
-        return apiChanghuaUploaderBaseUrl;
-    }
+    // public String getApiChanghuaUploaderBaseUrl() {
+    //     return apiChanghuaUploaderBaseUrl;
+    // }
 
-    public void setApiChanghuaUploaderBaseUrl(String apiChanghuaUploaderBaseUrl) {
-        this.apiChanghuaUploaderBaseUrl = apiChanghuaUploaderBaseUrl;
-    }
+    // public void setApiChanghuaUploaderBaseUrl(String apiChanghuaUploaderBaseUrl) {
+    //     this.apiChanghuaUploaderBaseUrl = apiChanghuaUploaderBaseUrl;
+    // }
 
     public String getApiNtToFengChiaBaseUrl() {
         return apiNtToFengChiaBaseUrl;

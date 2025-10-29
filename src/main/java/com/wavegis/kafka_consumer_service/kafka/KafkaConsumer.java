@@ -19,7 +19,7 @@ public class KafkaConsumer {
 	private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
 	// Virtual Thread Executor
 	private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
-	
+
 	@Autowired
 	private DataDistributionService dataDistributionService;
 
@@ -106,7 +106,7 @@ public class KafkaConsumer {
 
 		ack.acknowledge();
 	}
-	
+
 	//南投資料丟逢甲
     @KafkaListener(id = "kafka_consumer_service_java-ntouToFengChia-0", topics = "sensordata", groupId = "kafka_consumer_service_java-ntouToFengChia")
     public void listenWavegisSensorNtouToFengChia(String kafkaMessage, Acknowledgment ack) {
@@ -145,7 +145,7 @@ public class KafkaConsumer {
 		            return;
 		        }
 				dataDistributionService.distribution("sensordata_post", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
-				
+
 				dataDistributionService.distribution("sensordata_post", PublisherEnum.ntpcSewer, orgId, stNo, kafkaMessage);
 				ack.acknowledge();
 			} catch (Exception e) {
@@ -154,7 +154,7 @@ public class KafkaConsumer {
 		});
 		sleep(10);
 	}
-	
+
 	@KafkaListener(id = "kafka_consumer_service_java-ntpc-2", topics = "sensordata_post", groupId = "kafka_consumer_service_java-ntpc")
 	public void listenWavegisPostDataNtpc(String kafkaMessage, Acknowledgment ack) {
 		executor.submit(() -> {
@@ -166,7 +166,7 @@ public class KafkaConsumer {
 		        }
 				if( !stNo.contains("ntpifem") && !stNo.contains("65000-")) {
 					dataDistributionService.distribution("sensordata_post", PublisherEnum.ntpc, orgId, stNo, kafkaMessage);
-				
+
 					dataDistributionService.distribution("sensordata_post", PublisherEnum.ntpcSewer, orgId, stNo, kafkaMessage);
 				}
 				ack.acknowledge();
@@ -208,19 +208,19 @@ public class KafkaConsumer {
 
 		ack.acknowledge();
 	}
-	
-	 @KafkaListener(id = "kafka_consumer_service_java-changhuaFloodWater-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaFloodWater")
-	    public void listenWavegisSensorChanghuaFloodWater(String kafkaMessage, Acknowledgment ack) {
-	        String stNo = kafkaMessage.split(",")[0].replace("\"", "");
-	        String orgId = kafkaMessage.split(",")[1];
-	        if (!filterDatas(orgId, stNo)) {
-	            return;
-	        }
-	        dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFloodWater, orgId, stNo, kafkaMessage);
-	        ack.acknowledge();
 
-	    }
-	 
+	//  @KafkaListener(id = "kafka_consumer_service_java-changhuaFloodWater-0", topics = "sensordata", groupId = "kafka_consumer_service_java-changhuaFloodWater")
+	//     public void listenWavegisSensorChanghuaFloodWater(String kafkaMessage, Acknowledgment ack) {
+	//         String stNo = kafkaMessage.split(",")[0].replace("\"", "");
+	//         String orgId = kafkaMessage.split(",")[1];
+	//         if (!filterDatas(orgId, stNo)) {
+	//             return;
+	//         }
+	//         dataDistributionService.distribution("sensordata", PublisherEnum.changhuaFloodWater, orgId, stNo, kafkaMessage);
+	//         ack.acknowledge();
+
+	//     }
+
 	private void sleep(int millisecond) {
 		try {
 			Thread.sleep(millisecond);

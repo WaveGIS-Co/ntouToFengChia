@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.wavegis.kafka_consumer_service.api.IChanghuaSewerageDepartmentApiService;
-import com.wavegis.kafka_consumer_service.api.IChanghuaUploaderService;
 import com.wavegis.kafka_consumer_service.api.IIowPublisherService;
 import com.wavegis.kafka_consumer_service.api.IKaohsiungWrbService;
 import com.wavegis.kafka_consumer_service.api.INewTaipeiService;
@@ -54,11 +53,11 @@ public class BeanConfig {
                 serviceConfig.getApiChanghuaVmUrl());
     }
 
-    @Bean
-    public IChanghuaUploaderService iChanghuaUploaderService() {
-        return RetrofitFactory.createService(IChanghuaUploaderService.class,
-                serviceConfig.getApiChanghuaUploaderBaseUrl());
-    }
+    // @Bean
+    // public IChanghuaUploaderService iChanghuaUploaderService() {
+    //     return RetrofitFactory.createService(IChanghuaUploaderService.class,
+    //             serviceConfig.getApiChanghuaUploaderBaseUrl());
+    // }
 
     @Bean
     public INewTaipeiService iNewTaipeiService() {

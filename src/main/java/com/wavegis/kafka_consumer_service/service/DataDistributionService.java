@@ -28,7 +28,6 @@ import com.wavegis.kafka_consumer_service.model.dto.NtouDevicesDTO;
 import com.wavegis.kafka_consumer_service.model.dto.RainDataDTO;
 import com.wavegis.kafka_consumer_service.model.enums.PublisherEnum;
 import com.wavegis.kafka_consumer_service.model.vo.ChsewerPostVO;
-import com.wavegis.kafka_consumer_service.model.vo.ChuploadPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.IowPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherFloodPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.KaohsiungWrbPublisherSewerPostVO;
@@ -76,8 +75,8 @@ public class DataDistributionService {
 
     private ExecutorService executor;
 
-    @Autowired
-    private FilterService filterService;
+    // @Autowired
+    // private FilterService filterService;
 
     @Autowired
     private NtouFilterService ntouFilterService;
@@ -85,8 +84,8 @@ public class DataDistributionService {
     @Autowired
     private NtouToFengChiaService ntouToFengChiaService;
 
-    @Autowired
-    private ChanghuaWatercenterService changhuaWatercenterService;
+    // @Autowired
+    // private ChanghuaWatercenterService changhuaWatercenterService;
 
     @Autowired
     private NtouConfig ntouConfig;
@@ -244,22 +243,22 @@ public class DataDistributionService {
 
                 break;
             }
-            case changhuaFloodWater: {
-                if (!"109".equals(org_id)) {
-                    break;
-                }
-                // yaml過濾資料
-                if (filterService.isFloodStation(st_no) || filterService.isWaterStation(st_no)) {
-                    KafkaDTO dto = prepareDto.apply(kafka_message);
-                    ChuploadPostVO vo = new ChuploadPostVO();
-                    vo = vo.toChuploadPostVO(dto);
+            // case changhuaFloodWater: {
+            //     if (!"109".equals(org_id)) {
+            //         break;
+            //     }
+            //     // yaml過濾資料
+            //     if (filterService.isFloodStation(st_no) || filterService.isWaterStation(st_no)) {
+            //         KafkaDTO dto = prepareDto.apply(kafka_message);
+            //         ChuploadPostVO vo = new ChuploadPostVO();
+            //         vo = vo.toChuploadPostVO(dto);
 
-                    int resCode = changhuaWatercenterService
-                    .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
-                    logger.info("changhuaFloodWater---topics={}, resCode={}",topices,resCode,JsonConverter.convert(vo));
-                }
-                break;
-            }
+            //         int resCode = changhuaWatercenterService
+            //         .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
+            //         logger.info("changhuaFloodWater---topics={}, resCode={}",topices,resCode,JsonConverter.convert(vo));
+            //     }
+            //     break;
+            // }
             case ntpc: {
                 if (!"110".equals(org_id)) {
                     break;
