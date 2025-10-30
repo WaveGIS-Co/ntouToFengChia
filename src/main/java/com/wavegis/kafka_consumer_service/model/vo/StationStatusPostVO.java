@@ -21,7 +21,7 @@ public class StationStatusPostVO {
     private String stationCodeName;// 測站代號
 
     @JsonProperty(value = "stationTime")
-    private Instant stationTime;
+    private String stationTime;
 
     @JsonProperty("isNetworkFailed")
     private boolean networkFailed;
@@ -32,7 +32,7 @@ public class StationStatusPostVO {
     @JsonProperty(value = "waterGaugeArray")
     private List<WaterGaugePostVO> waterGaugeArray;
 
-    public StationStatusPostVO(String stationCodeName, Instant stationTime, boolean networkFailed) {
+    public StationStatusPostVO(String stationCodeName, String stationTime, boolean networkFailed) {
         this.stationCodeName = stationCodeName;
         this.stationTime = stationTime;
         this.networkFailed = networkFailed;

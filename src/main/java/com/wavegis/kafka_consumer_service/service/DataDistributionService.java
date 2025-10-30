@@ -179,7 +179,9 @@ public class DataDistributionService {
                 String timeStr = dto.getDatatime();
                 LocalDateTime localDateTime = LocalDateTime.parse(timeStr, formatter);
                 ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Taipei"));
-                Instant stationTime = zonedDateTime.toInstant();
+                Instant instant = zonedDateTime.toInstant();
+                String stationTime = instant.toString();
+
 
                 boolean isNetworkFailed = false;
 
@@ -202,7 +204,7 @@ public class DataDistributionService {
                     break;
                 }
                 int resCode = ntouToFengChiaService.postData(vo);
-                logger.info("ntouToFengChia---topics={},resCode={}",topices,resCode,JsonConverter.convert(vo));
+                logger.info("ntouToFengChia---topics={},resCode={},data={}",topices,resCode,JsonConverter.convert(vo));
                 break;
             }
             case tpeSewer: {
