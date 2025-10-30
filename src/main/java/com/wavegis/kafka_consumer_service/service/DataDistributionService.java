@@ -36,6 +36,7 @@ import com.wavegis.kafka_consumer_service.model.vo.RainGaugeVO;
 import com.wavegis.kafka_consumer_service.model.vo.StationStatusPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.TpeSewerPublisherPostVO;
 import com.wavegis.kafka_consumer_service.model.vo.WaterGaugePostVO;
+import com.wavegis.kafka_consumer_service.response.MessageResponse;
 import com.wavegis.kafka_consumer_service.util.JsonConverter;
 import com.wavegis.kafka_consumer_service.util.Util;
 
@@ -203,8 +204,8 @@ public class DataDistributionService {
 
                     break;
                 }
-                int resCode = ntouToFengChiaService.postData(vo);
-                logger.info("ntouToFengChia---topics={},resCode={},data={}",topices,resCode,JsonConverter.convert(vo));
+                String message = ntouToFengChiaService.postData(vo);
+                logger.info("ntouToFengChia---topics={},message={},data={}",topices,message,JsonConverter.convert(vo));
                 break;
             }
             case tpeSewer: {
@@ -245,22 +246,7 @@ public class DataDistributionService {
 
                 break;
             }
-            // case changhuaFloodWater: {
-            //     if (!"109".equals(org_id)) {
-            //         break;
-            //     }
-            //     // yaml過濾資料
-            //     if (filterService.isFloodStation(st_no) || filterService.isWaterStation(st_no)) {
-            //         KafkaDTO dto = prepareDto.apply(kafka_message);
-            //         ChuploadPostVO vo = new ChuploadPostVO();
-            //         vo = vo.toChuploadPostVO(dto);
 
-            //         int resCode = changhuaWatercenterService
-            //         .uploadData(Collections.singletonList(vo.toChuploadPostVO(dto)));
-            //         logger.info("changhuaFloodWater---topics={}, resCode={}",topices,resCode,JsonConverter.convert(vo));
-            //     }
-            //     break;
-            // }
             case ntpc: {
                 if (!"110".equals(org_id)) {
                     break;

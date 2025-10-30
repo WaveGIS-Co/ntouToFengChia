@@ -26,16 +26,16 @@ import retrofit2.Response;
 public class Util {
 
 	private static final Logger logger = LoggerFactory.getLogger(Util.class);
-	
+
 	public final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	
+
 	public static LocalDateTime localDateTime;
-	
+
 	private static final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
-	
+
 	// 限制同時執行任務數量
 	private final static Semaphore semaphore = new Semaphore(100);
-	 
+
     public static LocalDateTime stringToLocalDateTime(String str) {
         localDateTime = LocalDateTime.parse(str, formatter);
         return localDateTime;
@@ -92,13 +92,13 @@ public class Util {
         sortSet.addAll(set);
 		return sortSet;
 	}
-	
+
 	public static Set<String> sortSetToString(String str){
 	   return Arrays.stream(Optional.ofNullable(str).orElse("").split(","))
         .map(String :: trim)
         .collect(Collectors.toSet());
 	}
-	
+
 	public static <T> List<T> callListApi(Call<List<T>> call, String method) {
 		Response<List<T>> res = null;
 		try {
@@ -121,7 +121,7 @@ public class Util {
 			return Collections.emptyList();
 		}
 	}
-	
+
 	public static <T> List<T> reTryListApi(Response<List<T>> res, Call<List<T>> call) {
 		int time = 1;
 		int code = 204;
@@ -149,7 +149,7 @@ public class Util {
 		}
 		return null;
 	}
-	
+
 	public static <T> T callApi(Call<T> call, String method, Class<T> clazz) {
 		Response<T> res = null;
 		try {
@@ -173,7 +173,7 @@ public class Util {
 			return null;
 		}
 	}
-	
+
 	public static <T> T reTryApi(Response<T> res, Call<T> call, Class<T> clazz) {
 		int time = 1;
 		int code = 204;
@@ -209,6 +209,8 @@ public class Util {
             res = call.execute();
             code = res.code();
             if (code == 200) {
+				String message=res.body().toString();
+				logger.info("message={}",message);
                 call.cancel();
                 return code;
             }else if(code == 401){
@@ -230,7 +232,7 @@ public class Util {
             return 501;
         }
     }
-    
+
     public static <T> int reTryApiResponseCode(Response<T> res, Call<T> call, String method) {
     	int code = 204;
     	// 取得 semaphore，限制同時提交的任務數量
@@ -272,7 +274,7 @@ public class Util {
 		}
         return code;
     }
-    
+
     public static <T> CompletableFuture<Integer> reTryApiResponseCodeAsync(
             Call<T> call, String method) {
 
