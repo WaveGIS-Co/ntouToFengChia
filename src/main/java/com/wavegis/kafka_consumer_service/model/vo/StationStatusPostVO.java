@@ -1,6 +1,5 @@
 package com.wavegis.kafka_consumer_service.model.vo;
 
-import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
